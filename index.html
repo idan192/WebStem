@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<link rel="stylesheet" href="css/rs.css" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="http://ryanscherf.net/rs.css" type="text/css" media="screen, projection">
+	<script type="text/javascript" src="http://ryanscherf.net/js/jquery.min.js"></script>
+	<style type="text/css"></style>
+	<script type="text/javascript" src="http://ryanscherf.net/js/jquery.switcher.js"></script>
+	<script type="text/javascript" src="http://ryanscherf.net/js/rs.js"></script>
+	
+	<script> 
+		var data = 0;
+		var selected = {"#img1":false, "#img2":false, "#img3":false,
+						"#img4":false, "#img5":false, "#img6":false};
+		function updater() { 
+			var matched = [];
+			var unmatched = [];
+			for (var k in selected) {
+				if (selected[k]) {
+					update(k);
+					matched.push("\"" + $(k).attr('src') + "\"");
+				} else {
+					unmatched.push("\"" + $(k).attr('src') + "\"");
+				}
+			}
+			if (data != 0) {
+				var send = {root: "\"" + $("#mainImg").attr('src') + "\"", yes: matched, no: unmatched};
+				$.ajax({
+					async: true,
+					type: "POST",
+					url: "data",
+					data : send
+				});
+			}
+			$.ajax({
+				async: false,
+				type: 'GET',
+				url: 'newImage',
+				success: function(info) {
+				  if (data == 0) {
+						data = info;
+						updater();
+					} else {
+						preload(info);
+						$("#mainImg").attr('src', data[0]);
+						$("#img1").attr('src', data[1]);
+						$("#img2").attr('src', data[2]);
+						$("#img3").attr('src', data[3]);
+						$("#img4").attr('src', data[4]);
+						$("#img5").attr('src', data[5]);
+						$("#img6").attr('src', data[6]);
+						data = info;
+					}
+				}
+			});
+		};
+		
+		function preload(arrayOfImages) {
+			$(arrayOfImages).each(function () {
+				$('<img />').attr('src',this).appendTo('body').css('display','none');
+			});
+		}
+		
+		function update(tag) {
+			if (selected[tag]) {
+				$(tag).attr('class', "imagedropshadow");
+			} else {
+				$(tag).attr('class', "clicked");
+			}
+			selected[tag] = !selected[tag];
+		}
+	</script>
+</head>
+
+<body onLoad="updater()">
+	<header id="top">
+
+		<div class="ryan">
+		
+			<img class="avatar" src="http://upload.wikimedia.org/wikipedia/en/thumb/4/42/UCSD_Seal.svg/1024px-UCSD_Seal.svg.png" alt="Idan">
+
+			<h2>Segments Matching<span>Idan Izhaki @ UCSD</span></h2>
+
+			<div class="social">
+				<a class="twitter" href="http://twitter.com/idan192" data-username="idan192">Twitter</a>
+				<a class="linkedin" href="http://linkedin.com/in/idan192" data-username="229841078">LinkedIn</a>
+				<a class="github" href="http://github.com/idan192">Github</a>
+				<a class="email" href="mailto:iizhaki@eng.ucsd.edu">Email me</a>
+			</div>
+
+		</div>
+
+	</header>
+	<div id="container" align="center" style="width:90%;height:700px;border:5px solid #000;border-bottom-left-radius: 35px;
+						border-radius: 35px;background-image: url('http://www.artwallpaperhi.com/thumbnails/detail/20121018/minimalistic%20dark%20mac%20textures%20digital%20art%20dark%20background%20style%201920x1080%20wallpaper_www.artwallpaperhi.com_30.jpg');">
+		<section>
+		<table class="tftable" border="0" style="width:100%">
+		<tr>
+		<th style="color:white; text-align:center">
+		Press image below after selection
+		</th>
+		<th/>
+		</tr>
+		<tr>
+			<th>
+			<a><img onclick="javascript:updater()" id="mainImg" class="imagedropshadow" src="" width=500 height=500 border="8"/></a>
+			<th>
+				<table class="tftable" border="0" style="width:100%">
+				<tr><th><a><img onclick="javascript:update('#img1')" id="img1" class="imagedropshadow" src="" width=300 height=300 border="8"/></a></th>
+					<th><a><img onclick="javascript:update('#img2')" id="img2" class="imagedropshadow" src="" width=300 height=300 border="8"/></a></th>
+					<th><a><img onclick="javascript:update('#img3')" id="img3" class="imagedropshadow" src="" width=300 height=300 border="8"/></a></th>
+				</tr>
+				<tr><th><a><img onclick="javascript:update('#img4')" id="img4" class="imagedropshadow" src="" width=300 height=300 border="8"/></a></th>
+					<th><a><img onclick="javascript:update('#img5')" id="img5" class="imagedropshadow" src="" width=300 height=300 border="8"/></a></th>
+					<th><a><img onclick="javascript:update('#img6')" id="img6" class="imagedropshadow" src="" width=300 height=300 border="8"/></a></th>
+				</tr>
+				</table>
+			</th>
+		</tr>
+		</table>
+		</section>
+	</div>
+</body>
+
+</html>
+
+
+
+
+
+
+

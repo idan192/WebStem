@@ -16,9 +16,28 @@
 	<script type="text/javascript" src="http://ryanscherf.net/js/rs.js"></script>
 	
 	<script>
-		var userName = "";
 		function setUserName() {
-			userName = prompt("Please enter a non-empty username:", "");
+			var userName = prompt("Please enter a non-empty username:", "");
+			setCookie("userName", userName, 100);
+			return userName;
+		}
+		
+		function getCookie(cname) {
+			var name = cname + "=";
+			var ca = document.cookie.split(';');
+			for(var i=0; i<ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0)==' ') c = c.substring(1);
+				if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+			}
+			return "";
+		}
+		
+		function setCookie(cname, cvalue, exdays) {
+			var d = new Date();
+			d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+			var expires = "expires=" + d.toUTCString();
+			document.cookie = cname + "=" + cvalue + "; " + expires;
 		}
 </script>
 
@@ -29,14 +48,15 @@
 		var logFile = 0;
 		var selected = {"#img1":false, "#img2":false, "#img3":false,
 						"#img4":false, "#img5":false, "#img6":false,
-						"#img7":false, "#img8":false, "#img9":false};
+						"#img7":false, "#img8":false, "#img9":false, "#img10":false};
 		function updater() { 
 			var redmatched = [];
 			var bluematched = [];
 			var unmatched = [];
 			if (data == 0) {		
+				var userName = getCookie("userName");
 				while (userName == "" || userName == null) {
-					setUserName();
+					userName = setUserName();
 				}
 				$('#userName').text("Logged in as: " + userName);
 				$.ajax({
@@ -95,6 +115,12 @@
 			});
 		};
 		
+		function cleanSession() {
+			setCookie("userName", "", 0);
+			data = 0;
+			updater();
+		}
+		
 		function preload(arrayOfImages) {
 			$(arrayOfImages).each(function () {
 				$('<img />').attr('src',this).appendTo('body').css('display','none');
@@ -136,6 +162,7 @@
 		<div class="ryan">
 			<img class="avatar" src="http://upload.wikimedia.org/wikipedia/en/thumb/4/42/UCSD_Seal.svg/1024px-UCSD_Seal.svg.png" alt="Idan">
 			<p align="center" id="userName" style="color:white">Please login</p>
+			<p align="center" style="color:grey; cursor:pointer" onclick="cleanSession()">[Logout]</p>
 			<h2>Segments Matching<span>Idan Izhaki @ UCSD</span></h2>
 
 			<div class="social">

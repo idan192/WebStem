@@ -15,23 +15,57 @@
 	<script type="text/javascript" src="http://ryanscherf.net/js/jquery.switcher.js"></script>
 	<script type="text/javascript" src="http://ryanscherf.net/js/rs.js"></script>
 	
+	<script>
+		var userName = "";
+		function setUserName() {
+			userName = prompt("Please enter a non-empty username:", "");
+		}
+</script>
+
 	<script> 
+		var len = 12;
 		var data = 0;
+		var marked = 0;
+		var logFile = 0;
 		var selected = {"#img1":false, "#img2":false, "#img3":false,
-						"#img4":false, "#img5":false, "#img6":false};
+						"#img4":false, "#img5":false, "#img6":false,
+						"#img7":false, "#img8":false, "#img9":false};
 		function updater() { 
-			var matched = [];
+			var redmatched = [];
+			var bluematched = [];
 			var unmatched = [];
-			for (var k in selected) {
-				if (selected[k]) {
-					update(k);
-					matched.push("\"" + $(k).attr('src') + "\"");
-				} else {
-					unmatched.push("\"" + $(k).attr('src') + "\"");
+			if (data == 0) {		
+				while (userName == "" || userName == null) {
+					setUserName();
 				}
-			}
-			if (data != 0) {
-				var send = {root: "\"" + $("#mainImg").attr('src') + "\"", yes: matched, no: unmatched};
+				$('#userName').text("Logged in as: " + userName);
+				$.ajax({
+					async: false,
+					type: "GET",
+					url: "newUser",
+					data: {user: "Idan"},
+					success: function(data) {
+						logFile = data;
+					}					
+				});
+			} else {
+				marked = 0;
+				$('#blueImg').attr('class', "blueshadow");
+				$('#redImg').attr('class', "redshadow");
+				for (var k in selected) {
+					if (selected[k]) {
+						if ($(k).attr('class') == "redclicked") {
+							redmatched.push("\"" + $(k).attr('src') + "\"");
+						} else {
+							bluematched.push("\"" + $(k).attr('src') + "\"");
+						}
+						update(k);
+					} else {
+						unmatched.push("\"" + $(k).attr('src') + "\"");
+					}
+				}
+				var send = {log: logFile, red: "\"" + $("#redImg").attr('src') + "\"", blue: "\"" + $("#blueImg").attr('src') + "\"", 
+							mreds: redmatched, mblues: bluematched, no: unmatched};
 				$.ajax({
 					async: true,
 					type: "POST",
@@ -42,6 +76,7 @@
 			$.ajax({
 				async: false,
 				type: 'GET',
+				data: {num: len},
 				url: 'newImage',
 				success: function(info) {
 				  if (data == 0) {
@@ -49,13 +84,11 @@
 						updater();
 					} else {
 						preload(info);
-						$("#mainImg").attr('src', data[0]);
-						$("#img1").attr('src', data[1]);
-						$("#img2").attr('src', data[2]);
-						$("#img3").attr('src', data[3]);
-						$("#img4").attr('src', data[4]);
-						$("#img5").attr('src', data[5]);
-						$("#img6").attr('src', data[6]);
+						$("#redImg").attr('src', data[0]);
+						$("#blueImg").attr('src', data[1]);
+						for (var i = 2; i < len; i++) {
+							$("#img" + (i - 1)).attr('src', data[i - 1]);
+						}
 						data = info;
 					}
 				}
@@ -69,12 +102,30 @@
 		}
 		
 		function update(tag) {
-			if (selected[tag]) {
-				$(tag).attr('class', "imagedropshadow");
+			if (selected[tag] == undefined) {
+				if (tag == '#redImg') {
+					$('#redImg').attr('class', "redclicked");
+					$('#blueImg').attr('class', "blueshadow");
+					marked = 1;
+				} else {
+					$('#redImg').attr('class', "redshadow");
+					$('#blueImg').attr('class', "blueclicked");
+					marked = 2;
+				}
 			} else {
-				$(tag).attr('class', "clicked");
+				if (selected[tag]) {
+					$(tag).attr('class', "imagedropshadow");
+				} else {
+					if (marked == 0) {
+						return;
+					} else if (marked == 1) {
+						$(tag).attr('class', "redclicked");
+					} else {
+						$(tag).attr('class', "blueclicked");
+					}
+				}
+				selected[tag] = !selected[tag];
 			}
-			selected[tag] = !selected[tag];
 		}
 	</script>
 </head>
@@ -83,9 +134,8 @@
 	<header id="top">
 
 		<div class="ryan">
-		
 			<img class="avatar" src="http://upload.wikimedia.org/wikipedia/en/thumb/4/42/UCSD_Seal.svg/1024px-UCSD_Seal.svg.png" alt="Idan">
-
+			<p align="center" id="userName" style="color:white">Please login</p>
 			<h2>Segments Matching<span>Idan Izhaki @ UCSD</span></h2>
 
 			<div class="social">
@@ -94,37 +144,42 @@
 				<a class="github" href="http://github.com/idan192">Github</a>
 				<a class="email" href="mailto:iizhaki@eng.ucsd.edu">Email me</a>
 			</div>
-
 		</div>
 
 	</header>
-	<div id="container" align="center" style="width:90%;height:700px;border:5px solid #000;border-bottom-left-radius: 35px;
-						border-radius: 35px;background-image: url('http://www.artwallpaperhi.com/thumbnails/detail/20121018/minimalistic%20dark%20mac%20textures%20digital%20art%20dark%20background%20style%201920x1080%20wallpaper_www.artwallpaperhi.com_30.jpg');">
+	<div id="container" align="center" style="width:90%;height:700px;border:5px solid #000;border-bottom-left-radius: 35px;border-color: #A65200;
+						border-radius: 35px;background-image: url('img/bg.jpg');">
 		<section>
 		<table class="tftable" border="0" style="width:100%">
 		<tr>
-		<th style="color:white; text-align:center">
-		Press image below after selection
-		</th>
-		<th/>
-		</tr>
-		<tr>
 			<th>
-			<a><img onclick="javascript:updater()" id="mainImg" class="imagedropshadow" src="" width=500 height=500 border="8"/></a>
+			<table class="tftable" align="center">
+			<tr>
+				<th><a><img onclick="update('#redImg')" id="redImg" class="redshadow" src="" width=300 height=300 border="8" style="border-radius: 50%"/></a></th>
+			</tr>
+			<tr>
+				<th><a><img onclick="update('#blueImg')" id="blueImg" class="blueshadow" src="" width=300 height=300 border="8" style="border-radius: 50%"/></a></th>
+			</tr>
+			</table>
 			<th>
 				<table class="tftable" border="0" style="width:100%">
-				<tr><th><a><img onclick="javascript:update('#img1')" id="img1" class="imagedropshadow" src="" width=300 height=300 border="8"/></a></th>
-					<th><a><img onclick="javascript:update('#img2')" id="img2" class="imagedropshadow" src="" width=300 height=300 border="8"/></a></th>
-					<th><a><img onclick="javascript:update('#img3')" id="img3" class="imagedropshadow" src="" width=300 height=300 border="8"/></a></th>
+				<tr><th><a><img onclick="javascript:update('#img1')" id="img1" class="imagedropshadow" src="" width=200 height=200 border="8" style="border-radius: 50%"/></a></th>
+					<th><a><img onclick="javascript:update('#img2')" id="img2" class="imagedropshadow" src="" width=200 height=200 border="8" style="border-radius: 50%"/></a></th>
+					<th><a><img onclick="javascript:update('#img3')" id="img3" class="imagedropshadow" src="" width=200 height=200 border="8" style="border-radius: 50%"/></a></th>
+					<th><a><img onclick="javascript:update('#img4')" id="img4" class="imagedropshadow" src="" width=200 height=200 border="8" style="border-radius: 50%"/></a></th>
+					<th><a><img onclick="javascript:update('#img5')" id="img5" class="imagedropshadow" src="" width=200 height=200 border="8" style="border-radius: 50%"/></a></th>
 				</tr>
-				<tr><th><a><img onclick="javascript:update('#img4')" id="img4" class="imagedropshadow" src="" width=300 height=300 border="8"/></a></th>
-					<th><a><img onclick="javascript:update('#img5')" id="img5" class="imagedropshadow" src="" width=300 height=300 border="8"/></a></th>
-					<th><a><img onclick="javascript:update('#img6')" id="img6" class="imagedropshadow" src="" width=300 height=300 border="8"/></a></th>
+				<tr><th><a><img onclick="javascript:update('#img6')" id="img6" class="imagedropshadow" src="" width=200 height=200 border="8" style="border-radius: 50%"/></a></th>
+					<th><a><img onclick="javascript:update('#img7')" id="img7" class="imagedropshadow" src="" width=200 height=200 border="8" style="border-radius: 50%"/></a></th>
+					<th><a><img onclick="javascript:update('#img8')" id="img8" class="imagedropshadow" src="" width=200 height=200 border="8" style="border-radius: 50%"/></a></th>
+					<th><a><img onclick="javascript:update('#img9')" id="img9" class="imagedropshadow" src="" width=200 height=200 border="8" style="border-radius: 50%"/></a></th>
+					<th><a><img onclick="javascript:update('#img10')" id="img10" class="imagedropshadow" src="" width=200 height=200 border="8" style="border-radius: 50%"/></a></th>
 				</tr>
 				</table>
 			</th>
 		</tr>
 		</table>
+		<input type="image" src="https://rusticcitrus.com/app/resources/images/buttons/gameBoard/submitButton.png" alt="Submit" style="height:10%;width:10%" onclick="javascript:updater()"/>
 		</section>
 	</div>
 </body>

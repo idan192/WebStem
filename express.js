@@ -43,22 +43,40 @@ function getDateTime() {
 app.use(bodyParser.urlencoded({extend: false}));
 
 app.post('/data', function(req, res){
-    root = req.body.root;
-	matched = req.body.yes;
+	log = req.body.log;
+    red = req.body.red;
+	blue = req.body.blue;
+	redmatched = req.body.mreds;
+	bluematched = req.body.mblues;
 	unmatched = req.body.no;
 
-	var time = getDateTime();
-
 	// {template:/photos/43.png, matched:[....], unmatched:[....]}
-	jsonStr = "{\"template\": " + root + ", \"matched\": [" + matched + "], \"unmatched\": [" + unmatched + "]}\n";
-	fs.appendFile('triplets/triplets_' + time + '.json', jsonStr); 
+	jsonStr = "{\"template 1\": " + red + "\", template 2\": " + blue + ", \"red-matched\": [" + 
+				redmatched + "]"  + ", \"blue-matched\": [" + bluematched + "], \"unmatched\": [" + unmatched + "]}\n";
+	fs.appendFile('triplets/triplets_' + log + '.json', jsonStr); 
 
-	for (var m in matched) {
-		for (var u in unmatched) {
-			str = root + ", " + matched[m] + ", " + unmatched[u] + "\n";
-			fs.appendFile('triplets/triplets_' + time + '.csv', str);
+	for (var r in redmatched) {
+		for (var b in bluematched) {
+			str = red + ", " + redmatched[r] + ", " + bluematched[b] + "\n";
+			fs.appendFile('triplets/triplets_' + log + '.csv', str);
 		}
 	}
+	
+	for (var b in bluematched) {
+		for (var r in redmatched) {
+			str = blue + ", " + bluematched[b] + ", " + redmatched[r] + "\n";
+			fs.appendFile('triplets/triplets_' + log + '.csv', str);
+		}
+	}
+});
+
+app.get('/newUser', function(req, res){
+    user = req.query.user;
+	var time = getDateTime();
+	
+	response = user + "_" + time;
+	console.log("New user: " + response);
+	res.send(response);
 });
 
 app.get('/', function (req, res) {
@@ -67,8 +85,15 @@ app.get('/', function (req, res) {
 });
 
 app.get('/newImage', function (req, res) {
-    randImages = info.getRandImages();
+    randImages = info.getRandImages(req.query.num);
     res.send(randImages);
+});
+
+app.get('/gallery', function (req, res) {
+	res.writeHead(302, {
+	  'Location': '/PhotoFloat/web/index.html'
+	});
+	res.end();
 });
 
 app.get('/*', function (req, res) {

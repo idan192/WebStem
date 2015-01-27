@@ -23,3 +23,54 @@ a:hover img.imagedropshadow {
 	-webkit-box-shadow: 1px 1px 150px #999; 
 	box-shadow: 1px 1px 150px #999; 
 }
+
+
+.redshadow { 
+	padding: 5px; 
+	border: 
+	solid 1px red; 
+}
+a:hover img.redshadow { 
+	border: solid 1px red;
+	-moz-box-shadow: 1px 1px 150px red;
+	-webkit-box-shadow: 1px 1px 150px red;
+	box-shadow: 1px 1px 150px red;
+}
+
+.redclicked { 
+	padding: 5px; 
+	border: 
+	solid 1px red; 
+}
+ 
+a img.redclicked { 
+	border: solid 1px red; 
+	-moz-box-shadow: 1px 1px 150px red; 
+	-webkit-box-shadow: 1px 1px 150px red; 
+	box-shadow: 1px 1px 150px red; 
+}
+
+.blueshadow { 
+	padding: 5px; 
+	border: 
+	solid 1px blue;
+}
+a:hover img.blueshadow { 
+	border: solid 1px blue;
+	-moz-box-shadow: 1px 1px 150px blue;
+	-webkit-box-shadow: 1px 1px 150px blue;
+	box-shadow: 1px 1px 150px blue;
+}
+
+.blueclicked { 
+	padding: 5px; 
+	border: 
+	solid 1px blue; 
+}
+ 
+a img.blueclicked { 
+	border: solid 1px blue; 
+	-moz-box-shadow: 1px 1px 150px blue; 
+	-webkit-box-shadow: 1px 1px 150px blue; 
+	box-shadow: 1px 1px 150px blue; 
+}

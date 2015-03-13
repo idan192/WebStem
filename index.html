@@ -8,12 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+	<link rel="stylesheet" href="css/rs_idan.css" type="text/css" media="screen, projection">
 	<link rel="stylesheet" href="css/rs.css" type="text/css" media="screen, projection">
-	<link rel="stylesheet" href="http://ryanscherf.net/rs.css" type="text/css" media="screen, projection">
-	<script type="text/javascript" src="http://ryanscherf.net/js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ui/jquery-ui.min.js"></script>
 	<style type="text/css"></style>
-	<script type="text/javascript" src="http://ryanscherf.net/js/jquery.switcher.js"></script>
-	<script type="text/javascript" src="http://ryanscherf.net/js/rs.js"></script>
+	<script type="text/javascript" src="js/jquery.switcher.js"></script>
+	<script type="text/javascript" src="js/rs.js"></script>
 	
 	<script>
 		function setUserName() {
@@ -49,12 +50,15 @@
 		var selected = {"#img1":false, "#img2":false, "#img3":false,
 						"#img4":false, "#img5":false, "#img6":false,
 						"#img7":false, "#img8":false, "#img9":false, "#img10":false};
+		var logger = []
+		
 		function updater() { 
 			var redmatched = [];
 			var bluematched = [];
 			var unmatched = [];
 			if (data == 0) {		
 				var userName = getCookie("userName");
+				userName = "Idan"
 				while (userName == "" || userName == null) {
 					userName = setUserName();
 				}
@@ -63,7 +67,7 @@
 					async: false,
 					type: "GET",
 					url: "newUser",
-					data: {user: "Idan"},
+					data: {user: userName},
 					success: function(data) {
 						logFile = data;
 					}					
@@ -84,14 +88,18 @@
 						unmatched.push("\"" + $(k).attr('src') + "\"");
 					}
 				}
+				var comment = $("#comment").attr('value')
 				var send = {log: logFile, red: "\"" + $("#redImg").attr('src') + "\"", blue: "\"" + $("#blueImg").attr('src') + "\"", 
-							mreds: redmatched, mblues: bluematched, no: unmatched};
+							mreds: redmatched, mblues: bluematched, no: unmatched, logging: logger, comm: comment};
+				$("#comment").attr('value', "")
+				
 				$.ajax({
 					async: true,
 					type: "POST",
 					url: "data",
 					data : send
 				});
+				//$.floatingMessage("Display message with timer.", {time:3000});
 			}
 			$.ajax({
 				async: false,
@@ -105,9 +113,11 @@
 					} else {
 						preload(info);
 						$("#redImg").attr('src', data[0]);
-						$("#blueImg").attr('src', data[1]);
-						for (var i = 2; i < len; i++) {
-							$("#img" + (i - 1)).attr('src', data[i - 1]);
+						$("#redImgHist").attr('src', data[1]);
+						$("#blueImg").attr('src', data[2]);
+						$("#blueImgHist").attr('src', data[3]);
+						for (var i = 4; i < len + 2; i++) {
+							$("#img" + (i - 3)).attr('src', data[i]);
 						}
 						data = info;
 					}
@@ -130,23 +140,28 @@
 		function update(tag) {
 			if (selected[tag] == undefined) {
 				if (tag == '#redImg') {
+					logger.push($('#redImg').attr('src') + " reference selected (red)");
 					$('#redImg').attr('class', "redclicked");
 					$('#blueImg').attr('class', "blueshadow");
 					marked = 1;
 				} else {
+					logger.push($('#blueImg').attr('src') + " reference selected (blue)");
 					$('#redImg').attr('class', "redshadow");
 					$('#blueImg').attr('class', "blueclicked");
 					marked = 2;
 				}
 			} else {
 				if (selected[tag]) {
+					logger.push($(tag).attr('src') + " was deselected")
 					$(tag).attr('class', "imagedropshadow");
 				} else {
 					if (marked == 0) {
 						return;
 					} else if (marked == 1) {
+						logger.push($(tag).attr('src') + " was selected as red")
 						$(tag).attr('class', "redclicked");
 					} else {
+						logger.push($(tag).attr('src') + " was selected as blue")
 						$(tag).attr('class', "blueclicked");
 					}
 				}
@@ -160,21 +175,12 @@
 	<header id="top">
 
 		<div class="ryan">
-			<img class="avatar" src="http://upload.wikimedia.org/wikipedia/en/thumb/4/42/UCSD_Seal.svg/1024px-UCSD_Seal.svg.png" alt="Idan">
 			<p align="center" id="userName" style="color:white">Please login</p>
 			<p align="center" style="color:grey; cursor:pointer" onclick="cleanSession()">[Logout]</p>
-			<h2>Segments Matching<span>Idan Izhaki @ UCSD</span></h2>
-
-			<div class="social">
-				<a class="twitter" href="http://twitter.com/idan192" data-username="idan192">Twitter</a>
-				<a class="linkedin" href="http://linkedin.com/in/idan192" data-username="229841078">LinkedIn</a>
-				<a class="github" href="http://github.com/idan192">Github</a>
-				<a class="email" href="mailto:iizhaki@eng.ucsd.edu">Email me</a>
-			</div>
 		</div>
 
 	</header>
-	<div id="container" align="center" style="width:90%;height:700px;border:5px solid #000;border-bottom-left-radius: 35px;border-color: #A65200;
+	<div id="container" align="center" style="width:90%;height:650px;border:5px solid #000;border-bottom-left-radius: 35px;border-color: #A65200;
 						border-radius: 35px;background-image: url('img/bg.jpg');">
 		<section>
 		<table class="tftable" border="0" style="width:100%">
@@ -182,9 +188,11 @@
 			<th>
 			<table class="tftable" align="center">
 			<tr>
+				<th><a><img onclick="update('#redImgHist')" id="redImgHist" src="" width=200 height=200/></a></th>
 				<th><a><img onclick="update('#redImg')" id="redImg" class="redshadow" src="" width=300 height=300 style="border-radius: 50%"/></a></th>
 			</tr>
 			<tr>
+				<th><a><img onclick="update('#blueImgHist')" id="blueImgHist" src="" width=200 height=200/></a></th>
 				<th><a><img onclick="update('#blueImg')" id="blueImg" class="blueshadow" src="" width=300 height=300 style="border-radius: 50%"/></a></th>
 			</tr>
 			</table>
@@ -207,7 +215,18 @@
 		</tr>
 		</table>
 		<input type="image" src="https://rusticcitrus.com/app/resources/images/buttons/gameBoard/submitButton.png" alt="Submit" style="height:10%;width:10%" onclick="javascript:updater()"/>
+		<h3 style="color:#FFFFEB">Please enter description for selection:</h3>
+		<textarea id="comment" name="myTextBox" style="width:70%;height:100px;border:5px solid #000;border-bottom-left-radius: 35px;border-color: #A65200;
+						border-radius: 35px;font-size: 1.5em; padding:20px; line-height: 120%; background: #FFFFEB" with="50%"></textarea>
 		</section>
+		<h2 style="color: #FFFFEB">Segments Matching<span>Idan Izhaki @ UCSD</span></h2>
+
+		<div class="social">
+			<a class="twitter" href="http://twitter.com/idan192" style="background-image: url(../images/twitter.png)" data-username="idan192">...........</a>
+			<a class="linkedin" href="http://linkedin.com/in/idan192" style="background-image: url(../images/linkedin.png)" data-username="229841078">...........</a>
+			<a class="github" href="http://github.com/idan192" style="background-image: url(../images/github.png)">...........</a>
+			<a class="email" href="mailto:iizhaki@eng.ucsd.edu" style="background-image: url(../images/email.png)">...........</a>
+		</div>
 	</div>
 </body>
 

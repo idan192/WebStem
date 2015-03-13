@@ -49,11 +49,14 @@ app.post('/data', function(req, res){
 	redmatched = req.body.mreds;
 	bluematched = req.body.mblues;
 	unmatched = req.body.no;
+	logger = req.body.logging;
+	comment = req.body.comm;
 
 	// {template:/photos/43.png, matched:[....], unmatched:[....]}
 	jsonStr = "{\"template 1\": " + red + "\", template 2\": " + blue + ", \"red-matched\": [" + 
 				redmatched + "]"  + ", \"blue-matched\": [" + bluematched + "], \"unmatched\": [" + unmatched + "]}\n";
 	fs.appendFile('triplets/triplets_' + log + '.json', jsonStr); 
+	fs.appendFile('triplets/triplets_' + log + '.log', logger + ", Comment: " + comment + "\n");
 
 	for (var r in redmatched) {
 		for (var b in bluematched) {
@@ -70,7 +73,7 @@ app.post('/data', function(req, res){
 	}
 });
 
-app.get('/newUser', function(req, res){
+app.get('/newUser', function(req, res) {
     user = req.query.user;
 	var time = getDateTime();
 	

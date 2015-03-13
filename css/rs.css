@@ -1,75 +1,571 @@
-.imagedropshadow { 
-	padding: 5px; 
-	border: 
-	solid 1px #EFEFEF; 
-}
- 
-.clicked { 
-	padding: 5px; 
-	border: 
-	solid 1px #EFEFEF; 
-}
- 
-a img.clicked { 
-	border: solid 1px red; 
-	-moz-box-shadow: 1px 1px 150px red; 
-	-webkit-box-shadow: 1px 1px 150px red; 
-	box-shadow: 1px 1px 150px red; 
+/*------------------ @reset ------------------*/
+body,html { margin:0; padding: 0; width: 100%; /*height:100%;*/ }
+body,h1,h2,h3,h4,h5,h6,pre,code { font-size: 1em; }
+ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,body,html,p,blockquote,fieldset,legend,
+input,button,select,textarea,dl,dd,dt,hr,table,thead,tbody,tfoot,tr,th,td
+{ margin:0; padding:0 }
+img,a img,:link img,:visited img { border:0;padding:0;margin:0; }
+address,cite,caption { font-style: normal }
+caption,th { text-align: left }
+ol,ul { margin:0; margin-left: 25px; }
+a,button { outline: 0; }
+input[type="submit"]::-moz-focus-inner, input[type="button"]::-moz-focus-inner, button::-moz-focus-inner { border: 0px; }
+
+@font-face{
+	font-family:ProximaNovaLight;
+	font-weight:normal;
+	src:url("../fonts/Proxima-Nova-Light.otf") format("opentype");
 }
 
-a:hover img.imagedropshadow { 
-	border: solid 1px #CCC; 
-	-moz-box-shadow: 1px 1px 150px #999; 
-	-webkit-box-shadow: 1px 1px 150px #999; 
-	box-shadow: 1px 1px 150px #999; 
+@font-face{
+	font-family:ProximaNovaBold;
+	font-weight:bold;
+	src:url("../fonts/Proxima-Nova-Bold.otf") format("opentype");
 }
 
-
-.redshadow { 
-	padding: 5px; 
-	border: 
-	solid 1px red; 
-}
-a:hover img.redshadow { 
-	border: solid 1px red;
-	-moz-box-shadow: 1px 1px 150px red;
-	-webkit-box-shadow: 1px 1px 150px red;
-	box-shadow: 1px 1px 150px red;
+@font-face{
+	font-family:ProximaNovaSemibold;
+	font-weight:normal;
+	src:url("../fonts/Proxima-Nova-Semibold.otf") format("opentype");
 }
 
-.redclicked { 
-	padding: 5px; 
-	border: solid 1px red; 
+::-moz-selection {
+	background:rgba(0,0,0,0.9);
+	color:#fff;
 }
- 
-a img.redclicked { 
-	border: solid 1px red; 
-	-moz-box-shadow: 0px 0px 10px 5px red; 
-	-webkit-box-shadow: 0px 0px 10px 5px red; 
-	box-shadow: 0px 0px 10px 5px red; 
+::selection {
+	background:rgba(0,0,0,0.9);
+	color:#fff;
 }
 
-.blueshadow { 
-	padding: 5px; 
-	border: 
-	solid 1px blue;
-}
-a:hover img.blueshadow { 
-	border: solid 1px blue;
-	-moz-box-shadow: 1px 1px 150px blue;
-	-webkit-box-shadow: 1px 1px 150px blue;
-	box-shadow: 1px 1px 150px blue;
+/*------------------ @body ------------------*/
+body {
+	/* twofishillustration.com created this header. Isn't it dope? */
+	background: #f4f3f3 url(../images/header.gif) repeat-x center top fixed;
+	color: #444948;
+	background-color: #00002C;
+	font: normal 16px/24px "ProximaNovaLight", "Helvetica Neue", Helvetica, sans-serif;
 }
 
-.blueclicked { 
-	padding: 5px; 
-	border: 
-	solid 1px blue; 
+a {
+	text-decoration: none;
+	color: #214a64;
 }
- 
-a img.blueclicked { 
-	border: solid 1px blue; 
-	-moz-box-shadow: 0px 0px 10px 5px blue; 
-	-webkit-box-shadow: 0px 0px 10px 5px blue; 
-	box-shadow: 0px 0px 10px 5px blue; 
+
+p strong {
+	font-family: ProximaNovaSemiBold;
+}
+
+	h1 {
+		margin: 0 auto;
+	}
+
+	h1, h1 a {
+		width: 333px;
+		height: 242px;
+		display: block;
+	}
+	
+		h1 a {
+			text-indent: -9999px;
+			background: url(../images/logo.png) no-repeat 0 0;
+			border: 0;
+		}
+
+	header {
+		height: 52px;
+		position: fixed;
+		top: 0;
+		width: 100%;
+	}
+
+	header .ryan {
+		padding-top: 5px;
+	}
+
+	header .avatar {
+		display: block;
+		border-radius: 50%;
+		width: 70px;
+		height: 70px;
+		margin: 0 auto;
+	}
+
+	header h2 {
+		text-transform: uppercase;
+		color: #fff;
+		text-align: center;
+		display: block;
+		font-size: 3em;
+		line-height: 1em;
+		padding-top: 20px;
+	}
+
+	header h2 span {
+		display: block;
+		font-size: 14px;
+		padding-top: 20px;
+		font-weight: normal;
+		color: rgba(255,255,255,0.6);
+		font-family: ProximaNovaLight;
+		letter-spacing: 0.2em;
+	}
+
+	header .social {
+		text-align: center;
+		padding-top: 0;
+	}
+
+		header .social a {
+			width: 50px;
+			height: 50px;
+			display: inline-block;
+			text-indent: -999em;
+			-webkit-transform: scale(0.5, 0.5);
+			transform: scale(0.5, 0.5);
+			background-position: center center;
+			background-repeat: no-repeat;
+			text-align: center;
+			border: 0;
+
+			-webkit-transition: all .2s ease-in-out; /* For Safari 3.1 to 6.0 */
+    	transition: all .2s ease-in-out;
+		}
+
+	header .social a.twitter  { background-image: url(../images/twitter.png); }
+	header .social a.dribbble { background-image: url(../images/dribbble.png); }
+	header .social a.linkedin { background-image: url(../images/linkedin.png); }
+	header .social a.medium   { background-image: url(../images/medium.png); display:none; }
+	header .social a.email    { background-image: url(../images/email.png); }
+	header .social a.github   { background-image: url(../images/github.png); }
+		
+#top {
+
+}
+
+.skills {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	height: 60px;
+	display: none;
+}
+	.skills li {  
+		border-top-style: solid;
+		display:inline-block;
+		width: 20%; 
+		position: absolute;
+		bottom: 0;
+		text-align: center;
+	}
+	.skills li.html  { border-top-color: rgba(33,74,100, 1.0); border-top-width: 10px; }
+	.skills li.scss  { border-top-color: rgba(33,74,100, 0.8); border-top-width: 10px; left: 20%; }
+	.skills li.js 	 { border-top-color: rgba(33,74,100, 0.6); border-top-width: 7px;  left: 40%; }
+	.skills li.rails { border-top-color: rgba(33,74,100, 0.4); border-top-width: 4px;  left: 60%; }
+	.skills li.ios   { border-top-color: rgba(33,74,100, 0.2); border-top-width: 4px;  left: 80%; }
+
+#container {
+	margin: 52px auto 0 auto;
+	width: 100%;
+	background: #fff;
+	position: relative;
+	box-shadow: 0 0 5px rgba(0,0,0,.2);
+	z-index: 3;
+	padding-top: 20px;
+}
+
+#container h2 {
+	border-bottom: 1px solid #f4f3f3;
+	display: block;
+	width: 100%;
+	font-size: 0.8em;
+	font-weight: bold;
+	padding: 0;
+	margin: 0 0 20px 0;
+	font-family: ProximaNovaSemiBold;
+	height: 50px;
+}
+
+	#container h2 span {
+		margin: 0;
+		display: block;
+		width: 780px;
+		margin: 0 auto;
+	}
+
+	#container h2 span em {
+		border-bottom: 1px solid #444948;
+		font-style: normal;
+		display: inline-block;
+		padding: 20px 0;
+		height: 10px;
+	}
+
+		#container h2 span em.lefty { float: left; }
+		#container h2 span em.righty { float: left; margin-left: 380px; }
+
+.portfolio {
+	width: 780px;
+	overflow: hidden;
+	margin: 0 auto;
+	display: block;
+	padding-bottom: 40px;
+}
+
+	.portfolio section.thirds {
+		width: 240px;
+		float: left;
+		overflow: hidden;
+	}
+
+		.portfolio section.thirds:nth-child(2) {
+			padding-left: 30px;
+			padding-right: 30px;
+		}
+
+		.portfolio section.thirds .item {
+			width: 100%;
+			margin-bottom: 30px;
+			display: block;
+		}
+
+		.portfolio section.thirds img {
+			width: 100%;
+			height: auto;
+			display: block;
+		}
+
+	.portfolio section.column {
+		width: 375px;
+		float: left;
+		overflow: hidden;
+	}
+
+	.portfolio section.column:last-child {
+		padding-left: 30px;
+	}
+
+		.portfolio section a { font-family: ProximaNovaSemiBold; }
+	
+		.portfolio section a.item {
+			position: relative;
+			display: block;
+			width: 375px;
+			overflow: hidden;
+			margin-bottom: 30px;
+			border: 0;
+		}
+
+		.portfolio section .icon {
+			margin-bottom: 30px;
+		}
+		
+			.portfolio section a img {
+				display: block;
+			}
+	
+#contact {
+	clear: both;
+	display: block;
+	width: 100%;
+	margin: 0 auto;
+	overflow: hidden;
+	padding: 60px 0;
+}
+
+#contact form {
+	display: block;
+	overflow:hidden;
+	width: 500px;
+	margin: 0 auto;
+}
+
+#contact h2 {
+	text-align: center;
+	font-weight: bold;
+	font-size: 18px;
+	padding-bottom: 5px;
+	color: #130E08;
+	border-bottom: 0;
+	height: auto;
+}
+
+#contact h3 {
+	text-align: center;
+	opacity: 0.7;
+	display: block;
+	padding-bottom: 20px;
+}
+
+form p {
+	padding-top: 20px;
+	margin-bottom: 40px;
+	display: block;
+	margin: 0 auto;
+	border-bottom: 1px solid #444948;
+}
+
+input, textarea, select {
+	border: 0;
+	font: normal 14px/21px ProximaNovaSemiBold, "Helvetica Neue", Helvetica, sans-serif;
+	padding: 10px 0;
+	background: none;
+	color: #444948;
+	border-radius: 0;
+	box-sizing: border-box;
+	width: 100%;
+	height: 40px;
+}
+
+textarea {
+}
+
+select { 
+	font-size: 12px;
+}
+
+input:focus, textarea:focus, select:focus {
+	outline: none;
+}
+
+	input {
+		resize:none;
+	}
+
+	input, textarea {
+		padding-left: 0.7em;
+	}
+
+	::-webkit-input-placeholder { color: #444948 !important; text-transform: uppercase; font-size: 12px; }
+	:-moz-placeholder { color: #444948 !important; text-transform: uppercase; font-size: 12px; }
+
+	div.button {
+		padding-top: 60px;
+	}
+
+	#submit {
+		display: block;
+		border: 0;
+		cursor: pointer;
+		margin: 0 auto;
+		color: #444948;
+		border: 1px solid #444948;
+		box-sizing: border-box;
+		width: 100%;
+		font-weight: bold;
+		text-transform: uppercase;
+		padding: 20px 0;
+		font-size: 1.3em;
+		background: none;
+		font: normal 14px ProximaNovaBold, "Helvetica Neue", Helvetica, sans-serif;
+		text-align: center;
+	}
+
+		#submit:hover {
+			background: #444948;
+			color: #fff;
+		}
+
+	.error {
+		border: 1px solid red;
+	}
+
+	select {
+	}
+
+	label {
+		display: none;
+	}
+	
+	.message {
+		height: 29px; 
+		font-size: 11px;
+		line-height: 11px;
+		padding: 17px 15px 0 15px;
+		text-align: center;
+		background: none;
+		font: normal 14px ProximaNovaBold, "Helvetica Neue", Helvetica, sans-serif;
+		text-transform: uppercase;
+	}
+	
+	#success { 
+		border: 1px solid #5bbd72; 
+		color: #5bbd72;
+	}
+	
+	#error { 
+		border: 1px solid red;
+		color: red;
+	}
+	
+footer {
+	width: 780px;
+	display: block;
+	margin: 0 auto;
+	padding-top: 30px;
+	text-align: center;
+	font-size: 11px;
+	color: #3F372F;
+	padding-bottom: 60px;
+	position: relative;
+	font-family: ProximaNovaSemibold;
+	text-align: right;
+}
+
+	footer p {
+		padding-bottom: 0;
+		margin: 0 auto;
+		display: block;
+		clear: both;
+	}
+
+	footer a {
+		color: #4F4740;
+		text-decoration: none;
+	}
+
+		footer a:hover {
+			color: #fff;
+			border-bottom-color: #fff;
+		}
+		
+	footer .twitter-share-button {
+		position: absolute;
+		left: 0;
+	}
+	
+	footer .twitter-follow-button {
+		position: absolute;
+		left: 0;
+	}
+		
+	#totop {
+		position: fixed;
+		bottom: 5px;
+		right: 10px;
+		font-size: 0.8em;
+		text-transform: uppercase;
+	}
+
+
+/* From animate.css */
+@-webkit-keyframes bounceInDown {
+	0% {
+		opacity: 0;
+		-webkit-transform: translateY(-2000px);
+	}
+	
+	60% {
+		opacity: 1;
+		-webkit-transform: translateY(30px);
+	}
+	
+	80% {
+		-webkit-transform: translateY(-10px);
+	}
+	
+	100% {
+		-webkit-transform: translateY(0);
+	}
+}
+
+@-moz-keyframes bounceInDown {
+	0% {
+		opacity: 0;
+		-moz-transform: translateY(-2000px);
+	}
+	
+	60% {
+		opacity: 1;
+		-moz-transform: translateY(30px);
+	}
+	
+	80% {
+		-moz-transform: translateY(-10px);
+	}
+	
+	100% {
+		-moz-transform: translateY(0);
+	}
+}
+
+@-o-keyframes bounceInDown {
+	0% {
+		opacity: 0;
+		-o-transform: translateY(-2000px);
+	}
+	
+	60% {
+		opacity: 1;
+		-o-transform: translateY(30px);
+	}
+	
+	80% {
+		-o-transform: translateY(-10px);
+	}
+	
+	100% {
+		-o-transform: translateY(0);
+	}
+}
+
+@keyframes bounceInDown {
+	0% {
+		opacity: 0;
+		transform: translateY(-2000px);
+	}
+	
+	60% {
+		opacity: 1;
+		transform: translateY(30px);
+	}
+	
+	80% {
+		transform: translateY(-10px);
+	}
+	
+	100% {
+		transform: translateY(0);
+	}
+}
+
+@media only screen and (max-width: 640px) {
+	.portfolio, 
+	.portfolio .column,
+	footer,
+	#contact form,
+	#container,
+	#container h2 span { width: 100%; box-sizing: border-box; }
+
+	#container { margin-bottom: 0; }
+
+	footer { padding-top: 0; padding-bottom: 10px; }
+
+	.portfolio section a.item,
+	.portfolio section a.item img,
+	.portfolio section.thirds,
+	.portfolio section.thirds:nth-child(2),
+	.portfolio section.column:nth-child(2),
+	.portfolio section.column { padding: 0; margin: 0; float: none; width: 100%; }
+
+	.portfolio section a.item,
+	.portfolio section.thirds .icon,
+	.portfolio section.thirds .item { margin-bottom: 10px; }
+
+	#container,
+	#contact form {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+
+	section.ethos,
+	#totop,
+	#container h2 span em.righty { display: none; }
+
+	div.button { padding-top: 10px; }
+
+	header .ryan { padding-top: 120px; }
+
+	header h2 span { padding-top: 0; padding-bottom: 20px; }
 }

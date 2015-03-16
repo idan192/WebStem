@@ -15,7 +15,11 @@
 	<style type="text/css"></style>
 	<script type="text/javascript" src="js/jquery.switcher.js"></script>
 	<script type="text/javascript" src="js/rs.js"></script>
-	
+	<style type='text/css'>
+		.right_border { border-right: 5px solid #A65200; }
+		.bottom_border { border-bottom: 5px solid #A65200; }
+	</style>
+
 	<script>
 		function setUserName() {
 			var userName = prompt("Please enter a non-empty username:", "");
@@ -40,13 +44,14 @@
 			var expires = "expires=" + d.toUTCString();
 			document.cookie = cname + "=" + cvalue + "; " + expires;
 		}
-</script>
+	</script>
 
 	<script> 
-		var len = 12;
+		var len = 8;
 		var data = 0;
 		var marked = 0;
 		var logFile = 0;
+		var circles = {};
 		var selected = {"#img1":false, "#img2":false, "#img3":false,
 						"#img4":false, "#img5":false, "#img6":false,
 						"#img7":false, "#img8":false, "#img9":false, "#img10":false};
@@ -101,6 +106,7 @@
 				});
 				//$.floatingMessage("Display message with timer.", {time:3000});
 			}
+			
 			$.ajax({
 				async: false,
 				type: 'GET',
@@ -123,6 +129,9 @@
 					}
 				}
 			});
+				
+			circles = {};
+			redrawAll();
 		};
 		
 		function cleanSession() {
@@ -140,38 +149,107 @@
 		function update(tag) {
 			if (selected[tag] == undefined) {
 				if (tag == '#redImg') {
-					logger.push($('#redImg').attr('src') + " reference selected (red)");
+					theSrc = $('#redImg').attr('src');
+					addCircle(theSrc, "red")
+					delCircle($('#blueImg').attr('src'));
+					logger.push(theSrc + " reference selected (red)");
 					$('#redImg').attr('class', "redclicked");
 					$('#blueImg').attr('class', "blueshadow");
+
 					marked = 1;
 				} else {
-					logger.push($('#blueImg').attr('src') + " reference selected (blue)");
+					theSrc = $('#blueImg').attr('src');
+					addCircle(theSrc, "blue")
+					delCircle($('#redImg').attr('src'));
+					logger.push(theSrc + " reference selected (blue)");
 					$('#redImg').attr('class', "redshadow");
 					$('#blueImg').attr('class', "blueclicked");
 					marked = 2;
 				}
 			} else {
 				if (selected[tag]) {
-					logger.push($(tag).attr('src') + " was deselected")
+					theSrc = $(tag).attr('src');
+					delCircle(theSrc);
+					logger.push(theSrc + " was deselected")
 					$(tag).attr('class', "imagedropshadow");
 				} else {
+					theSrc = $(tag).attr('src');
 					if (marked == 0) {
 						return;
 					} else if (marked == 1) {
-						logger.push($(tag).attr('src') + " was selected as red")
+						addCircle(theSrc, "red")
+						logger.push(theSrc + " was selected as red")
 						$(tag).attr('class', "redclicked");
 					} else {
-						logger.push($(tag).attr('src') + " was selected as blue")
+						addCircle(theSrc, "blue")
+						logger.push(theSrc + " was selected as blue")
 						$(tag).attr('class', "blueclicked");
 					}
 				}
 				selected[tag] = !selected[tag];
 			}
 		}
-	</script>
+		
+		window.onresize = myCanvas;
+		var fullImage;
+		var width = 0;
+		var height = 0;
+		var canvas;
+		var ctx;
+		
+		function parseDims(str) {
+			splitted = str.split(/\.|_/);
+			return splitted.splice(splitted.length - 4, 3);
+		}
+		
+		function myCanvas() {
+			fullImage = document.getElementById("mainImg");	
+			canvas = document.getElementById("myCanvas");
+			
+			var cords = parseDims(fullImage.src);
+			width = cords[0];
+			height = cords[1];
+			canvas.width = canvas.parentNode.offsetWidth;
+			canvas.height = canvas.parentNode.offsetWidth * height / width;
+			ctx = canvas.getContext("2d");
+			ctx.imageSmoothingEnabled = true;
+			ctx.mozImageSmoothingEnabled = true;
+			redrawAll();
+		}
+		
+		function delCircle(img) {
+			delete circles[img];
+			redrawAll();
+		}
+		
+		function addCircle(img, color) {
+			dims = parseDims(img);
+			x = dims[0]; y = dims[1]; r = dims[2];
+			var ratio = canvas.width / width;
+			var centerX = x * ratio
+			var centerY = y * ratio
+			var radius = r * ratio;
+			var toAdd = [centerX, centerY, radius, color];
+			circles[img] = toAdd;
+			redrawAll();
+		}
+		
+		function redrawAll() {
+			ctx.drawImage(fullImage, 0, 0, canvas.width, canvas.height);
+			Object.keys(circles).forEach(function (key) {
+				circle = circles[key];
+				ctx.beginPath();
+				ctx.arc(circle[0], circle[1], circle[2], 0, 2 * Math.PI, false);
+				ctx.lineWidth = 3;
+				ctx.strokeStyle = circle[3];
+				ctx.stroke();
+			});
+		}
+</script>
 </head>
 
-<body onLoad="updater()">
+<body onLoad="myCanvas(); updater()">
+	<img id="mainImg" src="http://idanizhaki.me:8080/img/stem_5311_2612_0.jpg" style="display:none">
 	<header id="top">
 
 		<div class="ryan">
@@ -180,41 +258,39 @@
 		</div>
 
 	</header>
-	<div id="container" align="center" style="width:90%;height:650px;border:5px solid #000;border-bottom-left-radius: 35px;border-color: #A65200;
+	<div id="container" align="center" style="width:90%;height:100%;border:5px solid #000;border-bottom-left-radius: 35px;border-color: #A65200;
 						border-radius: 35px;background-image: url('img/bg.jpg');">
 		<section>
 		<table class="tftable" border="0" style="width:100%">
 		<tr>
-			<th>
-			<table class="tftable" align="center">
-			<tr>
-				<th><a><img onclick="update('#redImgHist')" id="redImgHist" src="" width=200 height=200/></a></th>
-				<th><a><img onclick="update('#redImg')" id="redImg" class="redshadow" src="" width=300 height=300 style="border-radius: 50%"/></a></th>
-			</tr>
-			<tr>
-				<th><a><img onclick="update('#blueImgHist')" id="blueImgHist" src="" width=200 height=200/></a></th>
-				<th><a><img onclick="update('#blueImg')" id="blueImg" class="blueshadow" src="" width=300 height=300 style="border-radius: 50%"/></a></th>
-			</tr>
-			</table>
-			<th>
-				<table class="tftable" border="0" style="width:100%">
-				<tr><th><a><img onclick="javascript:update('#img1')" id="img1" class="imagedropshadow" src="" width=200 height=200 style="border-radius: 50%"/></a></th>
-					<th><a><img onclick="javascript:update('#img2')" id="img2" class="imagedropshadow" src="" width=200 height=200 style="border-radius: 50%"/></a></th>
-					<th><a><img onclick="javascript:update('#img3')" id="img3" class="imagedropshadow" src="" width=200 height=200 style="border-radius: 50%"/></a></th>
-					<th><a><img onclick="javascript:update('#img4')" id="img4" class="imagedropshadow" src="" width=200 height=200 style="border-radius: 50%"/></a></th>
-					<th><a><img onclick="javascript:update('#img5')" id="img5" class="imagedropshadow" src="" width=200 height=200 style="border-radius: 50%"/></a></th>
+			<th width="70%" height="100%" class="right_border">
+				<canvas id="myCanvas" width="1150%" height="500%" style="border:3px solid #A65200; width='100%'; border-radius: 15px;"> Your browser does not support the HTML5 canvas tag.</canvas>
+			</th>
+			<th width="30%">
+				<table class="tftable" border="0" style="width:110%" align="left">
+				<tr>
+					<th class="bottom_border"><a><img onclick="update('#redImg')" id="redImg" class="redshadow" src="" width=50% style="border-radius: 50%"/></a>
+						<a><img onclick="" id="redImgHist" class="redshadow" src="" width=20%/></a></th>
+					<th><a><img onclick="update('#blueImg')" id="blueImg" class="blueshadow" src="" width=50% style="border-radius: 50%"/></a>
+						<a><img onclick="" id="blueImgHist" class="blueshadow" src="" width=20%/></a></th>
 				</tr>
-				<tr><th><a><img onclick="javascript:update('#img6')" id="img6" class="imagedropshadow" src="" width=200 height=200 style="border-radius: 50%"/></a></th>
-					<th><a><img onclick="javascript:update('#img7')" id="img7" class="imagedropshadow" src="" width=200 height=200 style="border-radius: 50%"/></a></th>
-					<th><a><img onclick="javascript:update('#img8')" id="img8" class="imagedropshadow" src="" width=200 height=200 style="border-radius: 50%"/></a></th>
-					<th><a><img onclick="javascript:update('#img9')" id="img9" class="imagedropshadow" src="" width=200 height=200 style="border-radius: 50%"/></a></th>
-					<th><a><img onclick="javascript:update('#img10')" id="img10" class="imagedropshadow" src="" width=200 height=200 style="border-radius: 50%"/></a></th>
+				<tr>
+					<th><a><img onclick="update('#img1')" id="img1" class="imagedropshadow" src="" width=50% style="border-radius: 50%"/></a></th>
+					<th><a><img onclick="update('#img2')" id="img2" class="imagedropshadow" src="" width=50% style="border-radius: 50%"/></a></th>
+				</tr>
+				<tr>
+					<th><a><img onclick="update('#img3')" id="img3" class="imagedropshadow" src="" width=50% style="border-radius: 50%"/></a></th>
+					<th><a><img onclick="update('#img4')" id="img4" class="imagedropshadow" src="" width=50% style="border-radius: 50%"/></a></th>
+				</tr>
+				<tr>
+					<th><a><img onclick="update('#img5')" id="img5" class="imagedropshadow" src="" width=50% style="border-radius: 50%"/></a></th>
+					<th><a><img onclick="update('#img6')" id="img6" class="imagedropshadow" src="" width=50% style="border-radius: 50%"/></a></th>
 				</tr>
 				</table>
 			</th>
 		</tr>
 		</table>
-		<input type="image" src="https://rusticcitrus.com/app/resources/images/buttons/gameBoard/submitButton.png" alt="Submit" style="height:10%;width:10%" onclick="javascript:updater()"/>
+		<input type="image" src="https://rusticcitrus.com/app/resources/images/buttons/gameBoard/submitButton.png" alt="Submit" style="height:10%;width:10%" onclick="updater()"/>
 		<h3 style="color:#FFFFEB">Please enter description for selection:</h3>
 		<textarea id="comment" name="myTextBox" style="width:70%;height:100px;border:5px solid #000;border-bottom-left-radius: 35px;border-color: #A65200;
 						border-radius: 35px;font-size: 1.5em; padding:20px; line-height: 120%; background: #FFFFEB" with="50%"></textarea>

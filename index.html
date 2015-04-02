@@ -113,23 +113,50 @@
 				data: {num: len},
 				url: 'newImage',
 				success: function(info) {
-				  if (data == 0) {
-						data = info;
-						updater();
-					} else {
-						preload(info);
-						$("#redImg").attr('src', data[0]);
-						$("#redImgHist").attr('src', data[1]);
-						$("#blueImg").attr('src', data[2]);
-						$("#blueImgHist").attr('src', data[3]);
-						for (var i = 4; i < len + 2; i++) {
-							$("#img" + (i - 3)).attr('src', data[i]);
-						}
-						data = info;
+					$("#redImg").hide();
+					$("#redImgHist").hide();
+					$("#blueImg").hide();
+					$("#blueImgHist").hide();
+					for (var i = 4; i < len + 2; i++) {
+						$("#img" + (i - 3)).hide();
 					}
+				  //if (data == 0) {
+					//	data = info;
+						//updater();
+					//} else {
+//						preload(info);
+					$("#redImg").attr('src', info[0]);
+					$("#redImgHist").attr('src', info[1]);
+					$("#blueImg").attr('src', info[2]);
+					$("#blueImgHist").attr('src', info[3]);
+					for (var i = 4; i < len + 2; i++) {
+						$("#img" + (i - 3)).attr('src', info[i]);
+					}
+					//}
+					$(document).ready(function() {
+						$("#redImg").show();
+						$("#redImgHist").show();
+						$("#blueImg").show();
+						$("#blueImgHist").show();
+						for (var i = 4; i < len + 2; i++) {
+							$("#img" + (i - 3)).show();
+						}
+					});
 				}
 			});
 				
+			for (var v in selected) {
+				if (selected[v]) {
+					update(v);
+				}
+			}
+			if ($('#redImg').attr('class') == "redclicked") {
+				update("#redImg");
+			}
+			if ($('#blueImg').attr('class') == "blueclicked") {
+				update("#blueImg");
+			}
+			
 			circles = {};
 			redrawAll();
 		};
@@ -144,6 +171,7 @@
 			$(arrayOfImages).each(function () {
 				$('<img />').attr('src',this).appendTo('body').css('display','none');
 			});
+			alert("Done");
 		}
 		
 		function update(tag) {
@@ -269,22 +297,22 @@
 			<th width="30%">
 				<table class="tftable" border="0" style="width:110%" align="left">
 				<tr>
-					<th class="bottom_border"><a><img onclick="update('#redImg')" id="redImg" class="redshadow" src="" width=50% style="border-radius: 50%"/></a>
+					<th class="bottom_border"><a><img onclick="update('#redImg')" id="redImg" class="redshadow" src="" width="150px" height="150px" style="border-radius: 50%"/></a>
 						<a><img onclick="" id="redImgHist" class="redshadow" src="" width=20%/></a></th>
-					<th><a><img onclick="update('#blueImg')" id="blueImg" class="blueshadow" src="" width=50% style="border-radius: 50%"/></a>
+					<th><a><img onclick="update('#blueImg')" id="blueImg" class="blueshadow" src="" width="150px" height="150px" style="border-radius: 50%"/></a>
 						<a><img onclick="" id="blueImgHist" class="blueshadow" src="" width=20%/></a></th>
 				</tr>
 				<tr>
-					<th><a><img onclick="update('#img1')" id="img1" class="imagedropshadow" src="" width=50% style="border-radius: 50%"/></a></th>
-					<th><a><img onclick="update('#img2')" id="img2" class="imagedropshadow" src="" width=50% style="border-radius: 50%"/></a></th>
+					<th><a><img onclick="update('#img1')" id="img1" class="imagedropshadow" src="" width="150px" height="150px" style="border-radius: 50%"/></a></th>
+					<th><a><img onclick="update('#img2')" id="img2" class="imagedropshadow" src="" width="150px" height="150px" style="border-radius: 50%"/></a></th>
 				</tr>
 				<tr>
-					<th><a><img onclick="update('#img3')" id="img3" class="imagedropshadow" src="" width=50% style="border-radius: 50%"/></a></th>
-					<th><a><img onclick="update('#img4')" id="img4" class="imagedropshadow" src="" width=50% style="border-radius: 50%"/></a></th>
+					<th><a><img onclick="update('#img3')" id="img3" class="imagedropshadow" src="" width="150px" height="150px" style="border-radius: 50%"/></a></th>
+					<th><a><img onclick="update('#img4')" id="img4" class="imagedropshadow" src="" width="150px" height="150px" style="border-radius: 50%"/></a></th>
 				</tr>
 				<tr>
-					<th><a><img onclick="update('#img5')" id="img5" class="imagedropshadow" src="" width=50% style="border-radius: 50%"/></a></th>
-					<th><a><img onclick="update('#img6')" id="img6" class="imagedropshadow" src="" width=50% style="border-radius: 50%"/></a></th>
+					<th><a><img onclick="update('#img5')" id="img5" class="imagedropshadow" src="" width="150px" height="150px" style="border-radius: 50%"/></a></th>
+					<th><a><img onclick="update('#img6')" id="img6" class="imagedropshadow" src="" width="150px" height="150px" style="border-radius: 50%"/></a></th>
 				</tr>
 				</table>
 			</th>

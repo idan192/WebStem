@@ -32,11 +32,10 @@ function shuffleArray(array) {
 }
 
 var allDirs = getDirs("./photos/");
+console.log(allDirs);
 function getNextList() {
-	if (currDir != "") {
-		allDirs.push(currDir);
-	}
-	currDir = allDirs.pop();
+    dirI = getRandomInt(0, allDirs.length - 1);
+	currDir = allDirs[dirI];
 	files = fs.readdirSync("./photos/" + currDir);
 	shuffleArray(files);
 }
@@ -50,13 +49,11 @@ function randomNumbers(size) {
 	var lindex = new Array(size);
 	for (var i = 0; i < size; i++) {
 		var newRand = getRandomInt(0, files.length - 1);
-		lindex[i] = newRand;
-		for (var l in lindex) {
-			if (newRand == l) {
-				i--;
-				break;
-			}
-		}		
+		if (newRand in lindex) {
+		    i--;
+		} else {
+			lindex[i] = newRand;
+		}
 	}
     return lindex;
 }
@@ -70,9 +67,9 @@ function getRandImages(len) {
   }
   return res;*/
   
-  while (files.length < len) {
-	getNextList();
-  }
+  //while (files.length < len) {
+  getNextList();
+  //}
   var res = [];
   for (var i = 0; i < 2; ++i) {
 	fname = files.pop();

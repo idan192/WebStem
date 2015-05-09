@@ -8,8 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-	<link rel="stylesheet" href="css/rs_idan.css" type="text/css" media="screen, projection">
-	<link rel="stylesheet" href="css/rs.css" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="css/rs_idan.css" type="text/css" media="screen, projection"/>
+	<link rel="stylesheet" href="css/rs.css" type="text/css" media="screen, projection"/>
+	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine"/>
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui/jquery-ui.min.js"></script>
 	<style type="text/css"></style>
@@ -24,7 +25,7 @@
 
 	<script>
 		function setUserName() {
-			var userName = prompt("Please enter a non-empty username:", "");
+			var userName = prompt("Please type your name:", "");
 			setCookie("userName", userName, 100);
 			return userName;
 		}
@@ -32,7 +33,7 @@
 		function getCookie(cname) {
 			var name = cname + "=";
 			var ca = document.cookie.split(';');
-			for(var i=0; i<ca.length; i++) {
+			for(var i = 0; i < ca.length; i++) {
 				var c = ca[i];
 				while (c.charAt(0)==' ') c = c.substring(1);
 				if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
@@ -49,18 +50,23 @@
 	</script>
 
 	<script> 
-		var len = 34;
-		var data = 0;
+		var b = true;
+		var len = 32;
+		var path = "";
+		var pageNum = 0;
 		var marked = 0;
 		var logFile = 0;
+		var cntGroups = 0;
 		var circles = {};
+		var allSrcs = [];
+		var mainImage1 = "";
+		var mainImage2 = "";
 		var selected = {"#img1":false, "#img2":false, "#img3":false, "#img4":false, "#img5":false, "#img6":false, 
 						"#img7":false, "#img8":false, "#img9":false, "#img10":false, "#img11":false, "#img12":false, 
 						"#img13":false, "#img14":false, "#img15":false, "#img16":false, "#img17":false, "#img18":false, 
 						"#img19":false, "#img20":false, "#img21":false, "#img22":false, "#img23":false, "#img24":false, 
 						"#img25":false, "#img26":false, "#img27":false, "#img28":false, "#img29":false, "#img30":false, 
 						"#img31":false, "#img32":false};
-		var logger = []
 		
 		function mapClone(mmap) {
 			var newMap = {};
@@ -74,7 +80,20 @@
 			var bluematched = [];
 			var unmatched = [];
 			
-			if (data == 0) {		
+			if (getCookie("pageNum") == "") {
+				pageNum = 0;
+			} else {
+				pageNum = parseInt(getCookie("pageNum"));
+			}
+			
+			if (b) {	
+				if (pageNum == 0) {
+					pageNum = (pageNum + 1);
+				}
+				b = false;
+				if (pageNum <= 1) {
+					$("#guide").show();
+				}
 				$("#shower").hide();
 				var userName = getCookie("userName");
 				while (userName == "" || userName == null) {
@@ -82,142 +101,163 @@
 				}
 				$('#userName').text("Logged in as: " + userName);
 				$.ajax({
-					async: false,
 					type: "GET",
 					url: "newUser",
 					data: {user: userName},
-					success: function(data) {
-						logFile = data;
+					success: function(realData) {
+						allSrcs = realData.srcs;
+						cntGroups = realData.grps;
+						logFile = 0;
+						setCookie("fileName", realData.user, 100);
+						$('#page').text("[Page " + pageNum + " of " + cntGroups + "]");
+						
+						for (var i = 0; i < allSrcs.length; ++i) {
+							$('<img id="org_' + i + '"/>').attr('src', "/photos/" + allSrcs[i]).appendTo('body').css('display','none');
+						}
 					}					
 				});
 			} else {
-				oldCircles = mapClone(circles);
-				marked = 0;
+				pageNum = (pageNum + 1);
 				$('#blueImg').attr('class', "blueshadow");
 				$('#redImg').attr('class', "redshadow");
-				for (var k in selected) {
-					if (selected[k]) {
-						if ($(k).attr('class') == "redclicked") {
-							redmatched.push("\"" + $(k).attr('src') + "\"");
-						} else {
-							bluematched.push("\"" + $(k).attr('src') + "\"");
-						}
-						update(k);
-					} else {
-						unmatched.push("\"" + $(k).attr('src') + "\"");
-					}
-				}
-				var comment = $("#comment").attr('value')
-				var send = {log: logFile, red: "\"" + $("#redImg").attr('src') + "\"", blue: "\"" + $("#blueImg").attr('src') + "\"", 
-							mreds: redmatched, mblues: bluematched, no: unmatched, logging: logger, comm: comment};
-				$("#comment").attr('value', "")
-				
+				var comment = $("#comment").attr('value')		
+				var realName = getCookie("fileName");
+				var send = {isSubmit: true, user: realName, log: logFile, comm: comment, src: "", mark: ""};
 				$.ajax({
-					async: true,
 					type: "POST",
 					url: "data",
-					data : send
+					data: send
 				});
-				//$.floatingMessage("Display message with timer.", {time:3000});
-				newCircles = mapClone(circles);
-				circles = oldCircles;
 				
-				redrawAll();
-				if ($("#transit").attr('checked')) {
-					$("#shower").fadeIn().delay(2500).fadeOut();
-				}
-				circles = newCircles;
+				marked = 0;
+				$("#comment").attr('value', "")
+				logFile++;
 			}
 			
-			//alert(0);
-			$("#myButton").hide();
-			var flag = false;
-			$.ajax({
-				async: false,
-				type: 'GET',
-				cache: 'false',
-				data: {num: len},
-				url: 'newImage',
-				success: function(info) {
-				    /*if (data == 0) {
-						data = info;
-						warmup();
-						updater();
-						flag = true;
-						return;
-					} else {
-						preload(info, "img_", 1);
-					}*/
-					data = info;
-					document.getElementById('redImg').src = info[0];
-					document.getElementById('redImgHist').src = info[1];
-					document.getElementById('blueImg').src = info[2];
-					document.getElementById('blueImgHist').src = info[3];
-					for (var i = 4; i < len + 2; i++) {
-						document.getElementById('img' + (i - 3)).src = info[i];
-					}
-					//data = info;
+			if ($("#transit").attr('checked')) {
+				$("#shower").click(function() {
+					$.ajax({
+						type: 'GET',
+						cache: 'false',
+						data: {num: len, page: pageNum},
+						url: 'newImage',
+						success: function(data) {
+							/*if (data == 0) {
+								data = info;
+								warmup();
+								updater();
+								return;
+							} else {
+								preload(info, "img_", len + 6);
+							}*/
+							
+							marked = 0;
+							for (var v in selected) {
+								selected[v] = false;
+								$(v).attr('class', "imagedropshadow");
+							}
+							circles = {};
+							
+							// Data size is len + 7 (path, org1, org2, ref1, ref2, hist1, hist2, len * imgs)
+							//data = info;
+							path = data[0];
+							mainImage1 = data[1];
+							mainImage2 = data[2];
+							document.getElementById('redImg').src = path + data[3];
+							document.getElementById('blueImg').src = path + data[4];
+							document.getElementById('redImgHist').src = path + data[5];
+							document.getElementById('blueImgHist').src = path + data[6];
+							
+							var canvas1 = document.getElementById("myCanvas1");
+							var canvas2 = document.getElementById("myCanvas2");
+							for (var i = 7; i < len + 7; i++) {
+								fName = path + data[i];
+								document.getElementById('img' + (i - 6)).src = fName;
+								if (data[i].indexOf("ref_0") >= 0) {
+									addCircle(fName, "black", canvas1, false);
+								} else {
+									addCircle(fName, "black", canvas2, false);
+								}
+							}
+							//redrawAll();
+							myCanvas();
+							//data = info;
+						}
+					});
+					$("#shower").fadeOut();
+				});
+				if (logFile >= 1) {
+					$("#shower").fadeIn();
+					myCanvas();
+				} else {
+					$("#shower").trigger("click");
 				}
-			});
-			if (flag) {
-				return;
+			} else {
+				$("#shower").trigger("click");
 			}
-			//alert(1);
-			for (var v in selected) {
-				if (selected[v]) {
-					update(v);
-				}
-			}
-			//alert(2);
-			if ($('#redImg').attr('class') == "redclicked") {
-				update("#redImg");
-			}
-			if ($('#blueImg').attr('class') == "blueclicked") {
-				update("#blueImg");
-			}
-			//alert(3);
 			
-			circles = {};
-			//redrawAll();
-			//alert(4);
-			$("#myButton").show();
+			$('#page').text("Page " + pageNum + " of " + cntGroups);
+			setCookie("pageNum", pageNum, 100);
+			if (cntGroups > 0 && pageNum > cntGroups) {
+				alert("Thank you for participating!");
+				cleanSession();
+			}
 		};
 		
 		function cleanSession() {
-			setCookie("userName", "", 0);
-			data = 0;
+			setCookie("userName", "", -1);
+			setCookie("pageNum", "", -1);
+			setCookie("fileNum", "", -1);
+			pageNum = logFile = data = 0;
+			b = true;
 			updater();
 		}
 		
 		function preload(arrayOfImages, pref, i) {
-			if (i >= len) {
+			if (i <= 0) {
 				return;
 			}
-			document.getElementById(pref + i).src = arrayOfImages[i];
-			preload(arrayOfImages, pref, i + 1);
+			document.getElementById(pref + i).src = arrayOfImages[0] + arrayOfImages[i];
+			preload(arrayOfImages, pref, i - 1);
 		}
 		
 		function warmup() {
-		    for (var i = 1; i <= len; i++) {
+		    for (var i = 1; i <= len + 6; i++) {
 				$('<img id="img_' + i + '"/>').attr('src', "").appendTo('body').css('display','none');
 			}
 		}
 		
 		function update(tag) {
+			if (typeof String.prototype.contains != 'function') {
+			  // see below for better implementation!
+			  String.prototype.contains = function (str){
+				return this.indexOf(str) > -1;
+			  };
+			}
+			
+			var canvas1 = document.getElementById("myCanvas1");
+			var canvas2 = document.getElementById("myCanvas2");
+			
 			if (selected[tag] == undefined) {
 				if (tag == '#redImg') {
 					theSrc = $('#redImg').attr('src');
-					addCircle(theSrc, "red")
+					if (theSrc.contains("ref_0")) {
+						addCircle(theSrc, "red", canvas1, true)
+					} else {
+						addCircle(theSrc, "red", canvas2, true)
+					}
 					delCircle($('#blueImg').attr('src'));
-					logger.push(theSrc + " reference selected (red)");
 					$('#redImg').attr('class', "redclicked");
 					$('#blueImg').attr('class', "blueshadow");
 					marked = 1;
 				} else {
 					theSrc = $('#blueImg').attr('src');
-					addCircle(theSrc, "blue")
+					if (theSrc.contains("ref_0")) {
+						addCircle(theSrc, "blue", canvas1, true)
+					} else {
+						addCircle(theSrc, "blue", canvas2, true)
+					}
 					delCircle($('#redImg').attr('src'));
-					logger.push(theSrc + " reference selected (blue)");
 					$('#redImg').attr('class', "redshadow");
 					$('#blueImg').attr('class', "blueclicked");
 					marked = 2;
@@ -226,19 +266,24 @@
 				if (selected[tag]) {
 					theSrc = $(tag).attr('src');
 					delCircle(theSrc);
-					logger.push(theSrc + " was deselected")
 					$(tag).attr('class', "imagedropshadow");
 				} else {
 					theSrc = $(tag).attr('src');
 					if (marked == 0) {
 						return;
 					} else if (marked == 1) {
-						addCircle(theSrc, "red")
-						logger.push(theSrc + " was selected as red")
+						if (theSrc.contains("ref_0")) {
+							addCircle(theSrc, "red", canvas1, true)
+						} else {
+							addCircle(theSrc, "red", canvas2, true)
+						}
 						$(tag).attr('class', "redclicked");
 					} else {
-						addCircle(theSrc, "blue")
-						logger.push(theSrc + " was selected as blue")
+						if (theSrc.contains("ref_0")) {
+							addCircle(theSrc, "blue", canvas1, true)
+						} else {
+							addCircle(theSrc, "blue", canvas2, true)
+						}
 						$(tag).attr('class', "blueclicked");
 					}
 				}
@@ -246,12 +291,11 @@
 			}
 		}
 		
-		window.onresize = myCanvas;
-		var fullImage;
+		//window.onresize = myCanvas;		
 		var width = 0;
 		var height = 0;
-		var canvas;
-		var ctx;
+		var ctx1;
+		var ctx2;
 		
 		function parseDims(str) {
 			splitted = str.split(/\.|_/);
@@ -259,45 +303,100 @@
 		}
 		
 		function myCanvas() {
-			fullImage = document.getElementById("mainImg");	
-			canvas = document.getElementById("myCanvas");
+			var fullImage1 = document.getElementById(mainImage1);	
+			var fullImage2 = document.getElementById(mainImage2);	
 			
-			var cords = parseDims(fullImage.src);
-			width = cords[0];
-			height = cords[1];
-			canvas.width = canvas.parentNode.offsetWidth;
-			canvas.height = canvas.parentNode.offsetWidth * height / width;
-			ctx = canvas.getContext("2d");
-			ctx.imageSmoothingEnabled = true;
-			ctx.mozImageSmoothingEnabled = true;
+			var canvas1 = document.getElementById("myCanvas1");
+			var canvas2 = document.getElementById("myCanvas2");
+			
+			if (fullImage1.src.length <= 30) {
+				return;
+			}
+			
+			var cords = parseDims(fullImage1.src);
+			width = cords[1];
+			height = cords[0];
+			canvas1.height = canvas1.width * height / width;
+			
+			var cords = parseDims(fullImage2.src);
+			width = cords[1];
+			height = cords[0];
+			canvas2.height = canvas2.width * height / width;
+			
+			ctx1 = canvas1.getContext("2d");
+			ctx1.imageSmoothingEnabled = true;
+			ctx1.mozImageSmoothingEnabled = true;
+			
+			ctx2 = canvas2.getContext("2d");
+			ctx2.imageSmoothingEnabled = true;
+			ctx2.mozImageSmoothingEnabled = true;
+			
 			redrawAll();
 		}
 		
-		function delCircle(img) {
-			delete circles[img];
-			redrawAll();
-		}
-		
-		function addCircle(img, color) {
+		function addCircle(img, color, canvas, logit) {
 			dims = parseDims(img);
 			x = dims[0]; y = dims[1]; r = dims[2];
-			var ratio = canvas.width / width;
+			if (width == 0) {
+				myCanvas();
+			}
+			var ratio = canvas.width * 1.0 / width;
 			var centerX = x * ratio
 			var centerY = y * ratio
 			var radius = r * ratio;
-			var toAdd = [centerX, centerY, radius, color];
+			
+			var ctx = canvas.getContext("2d");
+			var toAdd = [centerX, centerY, radius, color, ctx];
 			circles[img] = toAdd;
-			redrawAll();
+
+			if (logit) {
+				var realName = getCookie("fileName");
+				var send = {isSubmit: false, user: realName, log: logFile, comm: "", src: img, mark: color};
+				$.ajax({
+					type: "POST",
+					url: "data",
+					data: send
+				});
+			} else {
+				//redrawAll();
+			}
+		}
+		
+		function delCircle(img) {
+			if (circles[img] == undefined) {
+				return;
+			}
+			var color = circles[img][3];
+			delete circles[img];
+			
+			var realName = getCookie("fileName");
+			var send = {isSubmit: false, user: realName, log: logFile, comm: "", src: img, mark: "uncheck " + color};
+			$.ajax({
+				type: "POST",
+				url: "data",
+				data: send
+			});
 		}
 		
 		function redrawAll() {
-			ctx.drawImage(fullImage, 0, 0, canvas.width, canvas.height);
+			var canvas1 = document.getElementById("myCanvas1");
+			var canvas2 = document.getElementById("myCanvas2");			
+			var ctx1 = canvas1.getContext("2d");
+			var ctx2 = canvas2.getContext("2d");
+
+			ctx1.drawImage(document.getElementById(mainImage1), 0, 0, canvas1.width, canvas1.height);
+			ctx2.drawImage(document.getElementById(mainImage2), 0, 0, canvas2.width, canvas2.height);
 			Object.keys(circles).forEach(function (key) {
 				circle = circles[key];
+				ctx = circle[4];
 				ctx.beginPath();
 				ctx.arc(circle[0], circle[1], circle[2], 0, 2 * Math.PI, false);
-				ctx.lineWidth = 3;
 				ctx.strokeStyle = circle[3];
+				if (circle[3] == "black") {
+					ctx.lineWidth = 0.2;
+				} else {
+					ctx.lineWidth = 3;
+				}
 				ctx.stroke();
 			});
 		}
@@ -305,15 +404,21 @@
 		function ZoomScreen100() {
 			document.body.style.zoom="100%"
 		}
+		
+		function hideGuide() {
+			$("#guide").hide();
+		}
 </script>
 </head>
 
-<body onLoad="myCanvas(); updater(); ZoomScreen100()">
-	<img id="mainImg" src="http://idanizhaki.me:8080/img/stem_5311_2612_0.jpg" style="display:none">
+<body onLoad="updater(); ZoomScreen100()">
+	<img id="mainImg1" src="" style="display:none"/>
+	<img id="mainImg2" src="" style="display:none"/>
 	<header id="top">
 
-		<div class="ryan">
-			<p align="center" id="userName" style="color:white">Please login</p>
+		<div class="ryan" align="center">
+				<p align="center" id="userName" style="color:white; display: inline">Please login</p></th>
+				||| <p align="center" id="page" style="color:white; display: inline"></p>
 			<p align="center" style="color:grey; cursor:pointer" onclick="cleanSession()">[Logout]</p>
 		</div>
 
@@ -386,7 +491,7 @@
 		</tr>
 		</table>
 		<input id="myButton" type="image" src="img/submitButton.png" alt="Submit" style="height:10%;width:10%" onclick="updater()"/></br>
-		<input id="transit" type="checkbox" style="vertical-align: middle; width: 25px" name="transit" align="middle"><font color="white">Transition page</font></input></br>
+		<input id="transit" type="checkbox" style="vertical-align: middle; width: 25px" name="transit" align="middle" checked><font color="white">Global-View Page</font></input></br>
 		
 		<font color="white">Please enter description for selection:</front></br>
 		<textarea id="comment" name="myTextBox" style="width:70%;height:100px;border:5px solid #000;border-bottom-left-radius: 35px;border-color: #A65200;
@@ -401,9 +506,48 @@
 			<a class="email" href="mailto:iizhaki@eng.ucsd.edu" style="background-image: url(../images/email.png)">...........</a>
 		</div>
 	</div>
+	<div id="guide" style="display:none">
+		<div id="backgroundPopup" style="left: 0%; top: 0%; width: 100%; height: 180%; position: absolute; opacity: 1; display: block; z-index: 4; 
+										border-radius: 25px; text-align: center; background-image: url('http://trickvilla.com/wp-content/uploads/Wood-Background-Image.png')">
+		<div id="backgroundPopup" style="left: 10%; top: 10%; width: 76%; height: 80%; position: absolute; opacity: 0.9; display: block; z-index: 4; background-color: white; 
+								text-align: left; vertical-align: middle; font-size: 25px; font-weight: bold; line-height: 40px; color: black; 
+								border-radius: 35px; padding: 50px; font-family: 'Open Sans', Open Sans;">
+			The app you are about to engage with is intended to collect quantitative information about the human ability to distinguish local textures in brain images.</br></br>
+			
+			Each of the following screens contains a set of circular images. There are two images on the left and right which we shall call “anchor” images, 
+			and 32 images between them, called “examples”. 
+			The left anchor is surrounded by a red ring, the right anchor is surrounded by a blue ring.</br></br>
+
+			The anchors are intended to contain significantly different textures, while the examples are contain textures that might be more similar to the right 
+			or more similar to the left anchor. </br></br>
+
+			Your task is to label the examples as blue or red. Start by clicking on one of the anchors to make the surrounding ring brighter. 
+			You can then click on any example to make its ring have the same color as the selected anchor. Clicking again would remove the color. 
+			To label with the opposite color click on the other anchor. </br></br>
+
+			A text box below the image is provided for you to add your comments regarding the particular page. </br></br>
+
+			When you are done labeling (you don’t  have to label all examples), click on “Submit” to get the next page. </br></br>
+
+			There is a checkbox titled “Global-View Page”, which is checked by default. 
+			If the box is checked when you click “submit” then before you get the next challenge page, 
+			you will see a page with the brain images with circles indicating where the texture images have been sampled. </br></br>
+
+			We hope you find it interesting! </br></br>
+
+			Let us know if you have any comments, </br></br>
+
+			Yoav Freund &emsp; <a href="mailto:yfreund@ucsd.edu">yfreund@ucsd.edu</a> </br>
+			Idan Izhaki &emsp; &emsp; <a href="mailto:iizhaki@ucsd.edu">iizhaki@ucsd.edu</a>
+		</div>
+		</br>
+		<img src="images/continue.png" style="cursor: pointer" onclick="hideGuide()">
+		</div>
+	</div>
 	<div id="shower">
-		<div style="position:absolute; width: 800px; height: 100%; top: 70%; left: 50%; margin: -400px 0 0 -400px; z-index: 4">  
-			<canvas id="myCanvas" width="800px" style="border:15px solid #A65200; width='100%'; border-radius: 20px; z-index: 100"> Your browser does not support the HTML5 canvas tag.</canvas>
+		<div style="position:absolute; width: 800px; height: 100%; top: 50%; left: 50%; margin: -400px 0 0 -400px; z-index: 4">  
+			<canvas id="myCanvas1" width="800px" style="border:15px solid #A65200; width='100%'; border-radius: 20px; z-index: 100"> Your browser does not support the HTML5 canvas tag.</canvas>
+			<canvas id="myCanvas2" width="800px" style="border:15px solid #A65200; width='100%'; border-radius: 20px; z-index: 100"> Your browser does not support the HTML5 canvas tag.</canvas>
 		</div>
 		<div id="backgroundPopup" style="height: 100%; opacity: 0.8; display: block; z-index: 3"/>
 	</div>

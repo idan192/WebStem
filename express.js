@@ -2,21 +2,22 @@ var express = require('express');
 var fs = require('fs');
 var http = require('http');
 var path = require('path');
-var info = require('./requestinfo')
-var bodyParser = require('body-parser')
+var info = require('./requestinfo');
+var bodyParser = require('body-parser');
 
 var app = express();
 var server = http.createServer(app);
 
-var port = 8080;
+var port = 8081;
 var url  = 'http://localhost:' + port + '/';
 var randImages = [];
+var logFiles = {};
+
 
 server.listen(port);
 console.log(url);
 
 function getDateTime() {
-
     var date = new Date();
 
     var hour = date.getHours();
@@ -37,58 +38,60 @@ function getDateTime() {
     day = (day < 10 ? "0" : "") + day;
 
     return year + month + day + "T" + hour + min + sec;
-
 }
 
 app.use(bodyParser.urlencoded({extend: false}));
 
-app.post('/data', function(req, res){
-	log = req.body.log;
-    red = req.body.red;
-	blue = req.body.blue;
-	redmatched = req.body.mreds;
-	bluematched = req.body.mblues;
-	unmatched = req.body.no;
-	logger = req.body.logging;
-	comment = req.body.comm;
-
-	// {template:/photos/43.png, matched:[....], unmatched:[....]}
-	jsonStr = "{\"template 1\": " + red + "\", template 2\": " + blue + ", \"red-matched\": [" + 
-				redmatched + "]"  + ", \"blue-matched\": [" + bluematched + "], \"unmatched\": [" + unmatched + "]}\n";
-	fs.appendFile('triplets/triplets_' + log + '.json', jsonStr); 
-	fs.appendFile('triplets/triplets_' + log + '.log', logger + ", Comment: " + comment + "\n");
-
-	for (var r in redmatched) {
-		for (var b in bluematched) {
-			str = red + ", " + redmatched[r] + ", " + bluematched[b] + "\n";
-			fs.appendFile('triplets/triplets_' + log + '.csv', str);
-		}
+function fileWriter(fileName, text) {
+	/*var log = logFiles[fileName];
+	if (log == undefined) {
+		log = fs.createWriteStream(fileName, {'flags': 'a'});
+		logFiles[fileName] = log;
 	}
+	log.once('drain', text);
+	*/
+	fs.appendFileSync(fileName, text);
+}
+
+app.post('/data', function(req, res) {
+	var user = req.body.user;
+	var logF = req.body.log;
+	var filePath = "triplets/triplets_page_" + logF + ".log";
 	
-	for (var b in bluematched) {
-		for (var r in redmatched) {
-			str = blue + ", " + bluematched[b] + ", " + redmatched[r] + "\n";
-			fs.appendFile('triplets/triplets_' + log + '.csv', str);
-		}
+	//console.log("======================");
+	var isSubmit = req.body.isSubmit;
+	if (isSubmit == "true") {		
+		var comment = req.body.comm;
+		fileWriter(filePath, "Submitted by " + user + ":\t" + comment + "\n*******************************\n\n");
+		//console.log(filePath + ":\n\tSubmitted:\t" + comment + "\n");
+	} else {
+		var mark = req.body.mark;
+		var src = req.body.src;
+		var msg = getDateTime() + "\tImage by " + user + ":\t" + src + "\t" + mark;
+		fileWriter(filePath, msg + "\n");
+		//console.log(filePath + ":\n\t" + msg + "\n");
 	}
+	res.end();
 });
 
 app.get('/newUser', function(req, res) {
     user = req.query.user;
 	var time = getDateTime();
+	var countData = info.countSources();
 	
+	//info.resetAll();
 	response = user + "_" + time;
-	console.log("New user: " + response);
-	res.send(response);
+	res.send({user: response, srcs: countData.srcs, grps: countData.grps});
 });
 
 app.get('/', function (req, res) {
-    console.log(__dirname);
+    //console.log(__dirname);
+	info.resetAll();
     res.sendFile(__dirname + path.normalize('/index.html'));
 });
 
 app.get('/newImage', function (req, res) {
-    randImages = info.getRandImages(req.query.num);
+    randImages = info.getRandImages(req.query.num, req.query.page);
     res.send(randImages);
 });
 
@@ -99,8 +102,17 @@ app.get('/gallery', function (req, res) {
 	res.end();
 });
 
+app.get('/reset', function(req, res){
+	info.resetAll();
+	
+	res.writeHead(302, {
+	  'Location': '/'
+	});
+	res.end();
+});
+
 app.get('/*', function (req, res) {
-    console.log(info.getPath(req));
+    //console.log(info.getPath(req));
     res.sendFile(__dirname + path.normalize(info.getPath(req)));
 });
 

@@ -180,11 +180,20 @@
 								}
 							}
 							//redrawAll();
-							myCanvas();
 							//data = info;
+							$("#shower").fadeOut(function() { myCanvas(); });
+							if (cntGroups > 0 && pageNum > cntGroups) {
+								alert("Thank you for participating!");
+								cleanSession();
+								return;
+							}
 						}
 					});
-					$("#shower").fadeOut();
+					if (cntGroups > 0 && pageNum > cntGroups) {
+						alert("Thank you for participating!");
+						cleanSession();
+						return;
+					}
 				});
 				if (logFile >= 1) {
 					$("#shower").fadeIn();
@@ -198,10 +207,6 @@
 			
 			$('#page').text("Page " + pageNum + " of " + cntGroups);
 			setCookie("pageNum", pageNum, 100);
-			if (cntGroups > 0 && pageNum > cntGroups) {
-				alert("Thank you for participating!");
-				cleanSession();
-			}
 		};
 		
 		function cleanSession() {

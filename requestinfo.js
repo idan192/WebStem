@@ -46,6 +46,9 @@ function shuffleArray(array, from, len) {
 
 function getNextList(skip, len, dirI) {
     //dirI = getRandomInt(0, allDirs.length - 1);
+	if (dirI >= allDirs.length) {
+		return;
+	}
 	currDir = allDirs[dirI];
 	files = fs.readdirSync("./photos/" + currDir);
 	//console.log(files);

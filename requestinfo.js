@@ -46,7 +46,7 @@ function shuffleArray(array, from, len) {
 
 function getNextList(skip, len, dirI) {
     //dirI = getRandomInt(0, allDirs.length - 1);
-	if (dirI >= allDirs.length) {
+	if (dirI >= allDirs.length || dirI < 0) {
 		return;
 	}
 	currDir = allDirs[dirI];

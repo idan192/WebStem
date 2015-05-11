@@ -23,7 +23,7 @@
 		.fit_border { border-left: 5px solid #A65200; border-right: 5px solid #A65200; }
 	</style>
 
-	<script>
+	<script>	
 		function setUserName() {
 			var userName = prompt("Please type your name:", "");
 			setCookie("userName", userName, 100);
@@ -61,6 +61,7 @@
 		var allSrcs = [];
 		var mainImage1 = "";
 		var mainImage2 = "";
+		var refA = "";
 		var selected = {"#img1":false, "#img2":false, "#img3":false, "#img4":false, "#img5":false, "#img6":false, 
 						"#img7":false, "#img8":false, "#img9":false, "#img10":false, "#img11":false, "#img12":false, 
 						"#img13":false, "#img14":false, "#img15":false, "#img16":false, "#img17":false, "#img18":false, 
@@ -76,6 +77,10 @@
 		}
 		
 		function updater() { 
+			if ($("#shower").is(":visible")) {
+				return;
+			}
+		
 			var redmatched = [];
 			var bluematched = [];
 			var unmatched = [];
@@ -85,6 +90,12 @@
 			} else {
 				pageNum = parseInt(getCookie("pageNum"));
 			}
+			
+			if (cntGroups == 0 && pageNum > cntGroups) {
+				cleanSession();
+				return;
+			}
+			
 			
 			if (b) {	
 				if (pageNum == 0) {
@@ -168,15 +179,15 @@
 							document.getElementById('redImgHist').src = path + data[5];
 							document.getElementById('blueImgHist').src = path + data[6];
 							
-							var canvas1 = document.getElementById("myCanvas1");
-							var canvas2 = document.getElementById("myCanvas2");
+							refA = "ref_" + mainImage1.substring(4);
+							
 							for (var i = 7; i < len + 7; i++) {
 								fName = path + data[i];
 								document.getElementById('img' + (i - 6)).src = fName;
-								if (data[i].indexOf("ref_0") >= 0) {
-									addCircle(fName, "black", canvas1, false);
+								if (data[i].indexOf(refA) >= 0) {
+									addCircle(fName, "black", 0, false);
 								} else {
-									addCircle(fName, "black", canvas2, false);
+									addCircle(fName, "black", 1, false);
 								}
 							}
 							//redrawAll();
@@ -189,11 +200,6 @@
 							}
 						}
 					});
-					if (cntGroups > 0 && pageNum > cntGroups) {
-						alert("Thank you for participating!");
-						cleanSession();
-						return;
-					}
 				});
 				if (logFile >= 1) {
 					$("#shower").fadeIn();
@@ -240,16 +246,13 @@
 			  };
 			}
 			
-			var canvas1 = document.getElementById("myCanvas1");
-			var canvas2 = document.getElementById("myCanvas2");
-			
 			if (selected[tag] == undefined) {
 				if (tag == '#redImg') {
 					theSrc = $('#redImg').attr('src');
-					if (theSrc.contains("ref_0")) {
-						addCircle(theSrc, "red", canvas1, true)
+					if (theSrc.indexOf(refA) >= 0) {
+						addCircle(theSrc, "red", 0, true)
 					} else {
-						addCircle(theSrc, "red", canvas2, true)
+						addCircle(theSrc, "red", 1, true)
 					}
 					delCircle($('#blueImg').attr('src'));
 					$('#redImg').attr('class', "redclicked");
@@ -257,10 +260,10 @@
 					marked = 1;
 				} else {
 					theSrc = $('#blueImg').attr('src');
-					if (theSrc.contains("ref_0")) {
-						addCircle(theSrc, "blue", canvas1, true)
+					if (theSrc.indexOf(refA) >= 0) {
+						addCircle(theSrc, "blue", 0, true)
 					} else {
-						addCircle(theSrc, "blue", canvas2, true)
+						addCircle(theSrc, "blue", 1, true)
 					}
 					delCircle($('#redImg').attr('src'));
 					$('#redImg').attr('class', "redshadow");
@@ -277,17 +280,17 @@
 					if (marked == 0) {
 						return;
 					} else if (marked == 1) {
-						if (theSrc.contains("ref_0")) {
-							addCircle(theSrc, "red", canvas1, true)
+						if (theSrc.indexOf(refA) >= 0) {
+							addCircle(theSrc, "red", 0, true)
 						} else {
-							addCircle(theSrc, "red", canvas2, true)
+							addCircle(theSrc, "red", 1, true)
 						}
 						$(tag).attr('class', "redclicked");
 					} else {
-						if (theSrc.contains("ref_0")) {
-							addCircle(theSrc, "blue", canvas1, true)
+						if (theSrc.indexOf(refA) >= 0) {
+							addCircle(theSrc, "blue", 0, true)
 						} else {
-							addCircle(theSrc, "blue", canvas2, true)
+							addCircle(theSrc, "blue", 1, true)
 						}
 						$(tag).attr('class', "blueclicked");
 					}
@@ -297,10 +300,11 @@
 		}
 		
 		//window.onresize = myCanvas;		
-		var width = 0;
-		var height = 0;
+		var width1 = 0, width2 = 0;
+		var height1 = 0, height2 = 0;
 		var ctx1;
 		var ctx2;
+		var cnvs = [0, 1];
 		
 		function parseDims(str) {
 			splitted = str.split(/\.|_/);
@@ -311,46 +315,47 @@
 			var fullImage1 = document.getElementById(mainImage1);	
 			var fullImage2 = document.getElementById(mainImage2);	
 			
-			var canvas1 = document.getElementById("myCanvas1");
-			var canvas2 = document.getElementById("myCanvas2");
-			
 			if (fullImage1.src.length <= 30) {
 				return;
 			}
+			if (cnvs[0] == 0) {
+				cnvs[0] = document.getElementById("myCanvas1");
+				cnvs[1] = document.getElementById("myCanvas2");
+			}
 			
 			var cords = parseDims(fullImage1.src);
-			width = cords[1];
-			height = cords[0];
-			canvas1.height = canvas1.width * height / width;
+			width1 = cords[1];
+			height1 = cords[0];
+			cnvs[0].height = cnvs[0].width * height1 / width1;
 			
 			var cords = parseDims(fullImage2.src);
-			width = cords[1];
-			height = cords[0];
-			canvas2.height = canvas2.width * height / width;
+			width2 = cords[1];
+			height2 = cords[0];
+			cnvs[1].height = cnvs[1].width * height2 / width2;
 			
-			ctx1 = canvas1.getContext("2d");
+			ctx1 = cnvs[0].getContext("2d");
 			ctx1.imageSmoothingEnabled = true;
 			ctx1.mozImageSmoothingEnabled = true;
 			
-			ctx2 = canvas2.getContext("2d");
+			ctx2 = cnvs[1].getContext("2d");
 			ctx2.imageSmoothingEnabled = true;
 			ctx2.mozImageSmoothingEnabled = true;
 			
 			redrawAll();
 		}
 		
-		function addCircle(img, color, canvas, logit) {
+		function addCircle(img, color, cv, logit) {
 			dims = parseDims(img);
 			x = dims[0]; y = dims[1]; r = dims[2];
-			if (width == 0) {
+			if (width1 == 0) {
 				myCanvas();
 			}
-			var ratio = canvas.width * 1.0 / width;
+			var ratio = cnvs[cv].width * 1.0 / width1;
 			var centerX = x * ratio
 			var centerY = y * ratio
 			var radius = r * ratio;
 			
-			var ctx = canvas.getContext("2d");
+			var ctx = cnvs[cv].getContext("2d");
 			var toAdd = [centerX, centerY, radius, color, ctx];
 			circles[img] = toAdd;
 
@@ -383,14 +388,13 @@
 			});
 		}
 		
-		function redrawAll() {
-			var canvas1 = document.getElementById("myCanvas1");
-			var canvas2 = document.getElementById("myCanvas2");			
-			var ctx1 = canvas1.getContext("2d");
-			var ctx2 = canvas2.getContext("2d");
+		function redrawAll() {		
+			var ctx1 = cnvs[0].getContext("2d");
+			var ctx2 = cnvs[1].getContext("2d");
 
-			ctx1.drawImage(document.getElementById(mainImage1), 0, 0, canvas1.width, canvas1.height);
-			ctx2.drawImage(document.getElementById(mainImage2), 0, 0, canvas2.width, canvas2.height);
+			ctx1.drawImage(document.getElementById(mainImage1), 0, 0, cnvs[0].width, cnvs[0].height);
+			ctx2.drawImage(document.getElementById(mainImage2), 0, 0, cnvs[1].width, cnvs[1].height);
+				
 			Object.keys(circles).forEach(function (key) {
 				circle = circles[key];
 				ctx = circle[4];
@@ -549,7 +553,7 @@
 		<img src="images/continue.png" style="cursor: pointer" onclick="hideGuide()">
 		</div>
 	</div>
-	<div id="shower">
+	<div id="shower" style="display:none">
 		<div style="position:absolute; width: 800px; height: 100%; top: 50%; left: 50%; margin: -400px 0 0 -400px; z-index: 4">  
 			<canvas id="myCanvas1" width="800px" style="border:15px solid #A65200; width='100%'; border-radius: 20px; z-index: 100"> Your browser does not support the HTML5 canvas tag.</canvas>
 			<canvas id="myCanvas2" width="800px" style="border:15px solid #A65200; width='100%'; border-radius: 20px; z-index: 100"> Your browser does not support the HTML5 canvas tag.</canvas>

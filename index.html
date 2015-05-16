@@ -91,12 +91,6 @@
 				pageNum = parseInt(getCookie("pageNum"));
 			}
 			
-			if (cntGroups == 0 && pageNum > cntGroups) {
-				cleanSession();
-				return;
-			}
-			
-			
 			if (b) {	
 				if (pageNum == 0) {
 					pageNum = (pageNum + 1);
@@ -122,8 +116,8 @@
 						setCookie("fileName", realData.user, 100);
 						$('#page').text("[Page " + pageNum + " of " + cntGroups + "]");
 						
-						for (var i = 0; i < allSrcs.length; ++i) {
-							$('<img id="org_' + i + '"/>').attr('src', "/photos/" + allSrcs[i]).appendTo('body').css('display','none');
+						for (var k in allSrcs) {
+							$('<img id="org_' + k + '"/>').attr('src', "/photos/" + allSrcs[k]).appendTo('body').css('display','none');
 						}
 					}					
 				});
@@ -179,7 +173,7 @@
 							document.getElementById('redImgHist').src = path + data[5];
 							document.getElementById('blueImgHist').src = path + data[6];
 							
-							refA = "ref_" + mainImage1.substring(4);
+							refA = "ref_" + mainImage1.substring(4) + "_";
 							
 							for (var i = 7; i < len + 7; i++) {
 								fName = path + data[i];
@@ -300,8 +294,8 @@
 		}
 		
 		//window.onresize = myCanvas;		
-		var width1 = 0, width2 = 0;
-		var height1 = 0, height2 = 0;
+		var widths = [0, 0];
+		var heights = [0, 0]
 		var ctx1;
 		var ctx2;
 		var cnvs = [0, 1];
@@ -315,23 +309,29 @@
 			var fullImage1 = document.getElementById(mainImage1);	
 			var fullImage2 = document.getElementById(mainImage2);	
 			
-			if (fullImage1.src.length <= 30) {
-				return;
-			}
 			if (cnvs[0] == 0) {
 				cnvs[0] = document.getElementById("myCanvas1");
 				cnvs[1] = document.getElementById("myCanvas2");
 			}
 			
+			try {
+				if (fullImage1.src.length <= 30) {
+					return;
+				}
+			} catch(err) {
+				setTimeout(function (){ myCanvas() }, 500); 
+				return;
+			}
+			
 			var cords = parseDims(fullImage1.src);
-			width1 = cords[1];
-			height1 = cords[0];
-			cnvs[0].height = cnvs[0].width * height1 / width1;
+			widths[0] = cords[1];
+			heights[0] = cords[0];
+			cnvs[0].height = cnvs[0].width * heights[0] / widths[0];
 			
 			var cords = parseDims(fullImage2.src);
-			width2 = cords[1];
-			height2 = cords[0];
-			cnvs[1].height = cnvs[1].width * height2 / width2;
+			widths[1] = cords[1];
+			heights[1] = cords[0];
+			cnvs[1].height = cnvs[1].width * heights[1] / widths[1];
 			
 			ctx1 = cnvs[0].getContext("2d");
 			ctx1.imageSmoothingEnabled = true;
@@ -347,10 +347,10 @@
 		function addCircle(img, color, cv, logit) {
 			dims = parseDims(img);
 			x = dims[0]; y = dims[1]; r = dims[2];
-			if (width1 == 0) {
+			if (widths[0] == 0) {
 				myCanvas();
 			}
-			var ratio = cnvs[cv].width * 1.0 / width1;
+			var ratio = cnvs[cv].height * 1.0 / heights[cv];
 			var centerX = x * ratio
 			var centerY = y * ratio
 			var radius = r * ratio;
@@ -402,7 +402,7 @@
 				ctx.arc(circle[0], circle[1], circle[2], 0, 2 * Math.PI, false);
 				ctx.strokeStyle = circle[3];
 				if (circle[3] == "black") {
-					ctx.lineWidth = 0.2;
+					ctx.lineWidth = 0.3;
 				} else {
 					ctx.lineWidth = 3;
 				}

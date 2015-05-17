@@ -62,14 +62,15 @@ function getRandomInt(min, max) {
 
 function countSources() {
 	var allFiles = fs.readdirSync("./photos/");
-    var allSrcs = [];
+    var allSrcs = {};
 	var cntGroups = 0;
 		
     for (var i = 0; i < allFiles.length; ++i) {
 		var file = allFiles[i];
 		var name = file.substring(0, 4);
         if (name == "src_") {
-            allSrcs.push(file);
+			idx = file.split("_")[1];
+            allSrcs[idx] = file;
 		} else if (name == "grou") {
 			++cntGroups;
 		}

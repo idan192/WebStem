@@ -94,6 +94,11 @@
 				pageNum = parseInt(getCookie("pageNum"));
 			}
 			
+			if (!b && pageNum > cntGroups) {
+				pageNum = 0;
+				b = true;
+			}
+			
 			if (b) {	
 				if (pageNum == 0) {
 					pageNum = (pageNum + 1);
@@ -124,9 +129,9 @@
 						$('#waiter').show();
 						for (var k in allSrcs) {
 							$('<img id="org_' + k + '"/>').attr('src', "/photos/" + allSrcs[k]).appendTo('body').css('display','none');
-							$('#org_' + k).load(tillFull);
+							$('#org_' + k).load(tillLoad);
 						}
-						while (fullCntr < totalFull);
+						//while (fullCntr < totalFull);
 					}					
 				});
 			} else {
@@ -163,8 +168,6 @@
 							} else {
 								preload(info, "img_", len + 6);
 							}*/
-							
-							//while (fullCntr < cntGroups);
 							
 							marked = 0;
 							for (var v in selected) {
@@ -456,26 +459,17 @@
 		
 		function tillLoad() {
 			++waitCntr;
-			if (waitCntr >= 36) {
+			if (waitCntr >= 38) {
 				setTimeout(function() {
 					waitCntr = 0;
 					$("#waiter").hide();
-				  }, 300);
-			}
-		}
-		
-		function tillFull() {
-			++fullCntr;
-			if (fullCntr >= totalFull) {
-				setTimeout(function() {
-					$("#waiter").hide();
-				  }, 300);
+				}, 300);
 			}
 		}
 </script>
 </head>
 
-<body onLoad="ZoomScreen100(); updater()" style="overflow-x: hidden; width: 1920px">
+<body onLoad="ZoomScreen100(); updater()" style="overflow-x: hidden; width: 1920px; height: 1080px">
 	<img id="mainImg1" src="" style="display:none"/>
 	<img id="mainImg2" src="" style="display:none"/>
 	<div class="ryan" align="center" style="width:1920px; margin: 0px: top: 0px: height: 1080px;"; margin: 0px">
@@ -483,8 +477,29 @@
 			||| <p align="center" id="page" style="color:white; display: inline"></p>
 		<p align="center" style="color:grey; cursor:pointer" onclick="cleanSession()">[Logout]</p>
 	</div>
-	<div id="container" align="center" style="width:92%; margin: 0px; margin-left: 80px; margin-right: 80px; padding-right: -80px; top: 0px; height:1080px;border:5px solid #000;border-bottom-left-radius: 35px;border-color: #A65200;
-						border-radius: 35px;background-image: url('img/bg.jpg');">
+	
+	<div id="waiter" style="position:block; display:block">
+		<div id="backgroundPopup" style="opacity: 0.9; display: block; z-index: 2; height: 100%; width: 100%">
+			<div style="position: fixed; top: 30%; left: 50%; margin-left: -100px;
+						margin-top: -25px; font-size:xx-large; text-align:center; line-height: 130%">
+				Loading page. <br/> Please wait... <br/>
+				<img src="images/wait.gif" style="height:50px;margin-top: 12.5px;margin-botton:12.5px;"/>
+			</div>
+		</div>
+	</div>
+	
+	<div id="shower" style="position:block; display:none">
+		<div style="position:fixed; top: 45%; left: 50%; margin: -350px 0 0 -350px; z-index: 10">  
+			<canvas id="myCanvas1" width="700px" style="border:15px solid #A65200; border-radius: 20px; z-index: 2"> Your browser does not support the HTML5 canvas tag.</canvas>
+			<br/>
+			<canvas id="myCanvas2" width="700px" style="border:15px solid #A65200; border-radius: 20px; z-index: 2"> Your browser does not support the HTML5 canvas tag.</canvas>
+		</div>
+		<div id="backgroundPopup" style="opacity: 0.9; display: block; z-index: 2; height: 120%"></div>
+	</div>
+	
+	<div id="container" align="center" style="display: block; width:92%; margin: 0px; margin-left: 80px; margin-right: 80px; padding-right: -80px; top: 0px; height:1080px;
+											  border:5px solid #000;border-bottom-left-radius: 35px;border-color: #A65200;
+											  border-radius: 35px;background-image: url('img/bg.jpg'); z-index: 1">
 		<section>
 		<table class="tftable" align="center" border="0" style="width:100%">
 		<tr>
@@ -602,25 +617,18 @@
 		</br>
 		<img src="images/continue.png" style="cursor: pointer" onclick="hideGuide()"/>
 		</div>
-	</div>
-					
-	<div id="waiter" style="position:absolute; display:block">
-		<div id="backgroundPopup" style="height: 100%; opacity: 0.9; display: block; z-index: 500">
-			<div style="position: absolute; top: 50%; left: 50%; margin-left: -100px;  
-						margin-top: -25px; font-size:xx-large; text-align:center; line-height: 130%">
-				Loading page. <br/> Please wait... <br/>
-				<img src="images/wait.gif" style="height:50px;margin-top: 12.5px;margin-botton:12.5px;"/>
-			</div>
-		</div>
+		
 	</div>
 	
-	<div id="shower" style="display:none">
-		<div style="position:absolute; width: 800px; height: 100%; top: 50%; left: 50%; margin: -400px 0 0 -400px; z-index: 4">  
-			<canvas id="myCanvas1" width="800px" style="border:15px solid #A65200; width='100%'; border-radius: 20px; z-index: 100"> Your browser does not support the HTML5 canvas tag.</canvas>
-			<canvas id="myCanvas2" width="800px" style="border:15px solid #A65200; width='100%'; border-radius: 20px; z-index: 100"> Your browser does not support the HTML5 canvas tag.</canvas>
+	
+	<div id="shower" style="position:fixed; display:none">
+		<div style="position:fixed; top: 50%; left: 50%; margin: -400px 0 0 -400px; z-index: 10; height: 120%">  
+			<canvas id="myCanvas1" width="400px" style="border:15px solid #A65200; width='100%'; border-radius: 20px; z-index: 100"> Your browser does not support the HTML5 canvas tag.</canvas>
+			<canvas id="myCanvas2" width="400px" style="border:15px solid #A65200; width='100%'; border-radius: 20px; z-index: 100"> Your browser does not support the HTML5 canvas tag.</canvas>
 		</div>
-		<div id="backgroundPopup" style="height: 100%; opacity: 0.9; display: block; z-index: 3"/>
+		<div id="backgroundPopup" style="height: 1080px; opacity: 0.9; display: block; z-index: 3"/>
 	</div>
+	
 </body>
 
 </html>

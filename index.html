@@ -93,7 +93,6 @@
 			} else {
 				pageNum = parseInt(getCookie("pageNum"));
 			}
-			pageNum = 15;
 			
 			if (b) {	
 				if (pageNum == 0) {
@@ -181,7 +180,7 @@
 							mainImage2 = data[2];
 							
 							$("#shower").hide();
-							$("#waiter").fadeIn();
+							$("#waiter").show();
 							$("#redImg").attr('src', path + data[3]);
 							$("#redImg").load(tillLoad);
 							$("#blueImg").attr('src', path + data[4]);
@@ -217,7 +216,7 @@
 					});
 				});
 				if (logFile >= 1) {
-					$("#shower").fadeIn();
+					$("#shower").show();
 					myCanvas();
 				} else {
 					$("#shower").trigger("click");
@@ -314,12 +313,16 @@
 			}
 		}
 		
-		window.onresize = myCanvas;		
+		window.onresize = ZoomScreen100;		
 		var widths = [0, 0];
 		var heights = [0, 0]
 		var ctx1;
 		var ctx2;
 		var cnvs = [0, 1];
+		
+		$(window).resize(function() {
+			ZoomScreen100();
+		});
 		
 		function parseDims(str) {
 			splitted = str.split(/\.|_/);
@@ -431,7 +434,20 @@
 		}
 		
 		function ZoomScreen100() {
-			document.body.style.zoom="100%"
+			var targetWidth = 1920.0;
+			var currentWidth = $(document.body).width();
+			var value = $(window).width() / targetWidth;
+			if (typeof document.body.style.zoom != "undefined")
+				document.body.style.zoom = value;
+			else if (typeof document.body.style.MozTransform != "undefined") {
+				document.body.style.MozTransformOrigin = "left top";
+				document.body.style.MozTransform = 'scale(' + value + ')';
+			}
+			else if (typeof document.body.style.WebkitTransform != "undefined") {
+				document.body.style.WebkitTransform = 'scale(' + value + ')';
+			}
+
+			$(document.body).width(targetWidth);
 		}
 		
 		function hideGuide() {
@@ -459,19 +475,15 @@
 </script>
 </head>
 
-<body onLoad="ZoomScreen100(); updater()">
+<body onLoad="ZoomScreen100(); updater()" style="overflow-x: hidden; width: 1920px">
 	<img id="mainImg1" src="" style="display:none"/>
 	<img id="mainImg2" src="" style="display:none"/>
-	<header id="top">
-
-		<div class="ryan" align="center">
-				<p align="center" id="userName" style="color:white; display: inline">Please login</p></th>
-				||| <p align="center" id="page" style="color:white; display: inline"></p>
-			<p align="center" style="color:grey; cursor:pointer" onclick="cleanSession()">[Logout]</p>
-		</div>
-
-	</header>
-	<div id="container" align="center" style="width:90%;height:100%;border:5px solid #000;border-bottom-left-radius: 35px;border-color: #A65200;
+	<div class="ryan" align="center" style="width:1920px; margin: 0px: top: 0px: height: 1080px;"; margin: 0px">
+			<p align="center" id="userName" style="color:white; display: inline">Please login</p></th>
+			||| <p align="center" id="page" style="color:white; display: inline"></p>
+		<p align="center" style="color:grey; cursor:pointer" onclick="cleanSession()">[Logout]</p>
+	</div>
+	<div id="container" align="center" style="width:92%; margin: 0px; margin-left: 80px; margin-right: 80px; padding-right: -80px; top: 0px; height:1080px;border:5px solid #000;border-bottom-left-radius: 35px;border-color: #A65200;
 						border-radius: 35px;background-image: url('img/bg.jpg');">
 		<section>
 		<table class="tftable" align="center" border="0" style="width:100%">
@@ -479,7 +491,7 @@
 			<th width="auto">
 				<td align="center"> 
 					<font size="15" color="red">RED</font>
-					<a><img onclick="update('#redImg')" id="redImg" class="redshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a>
+					<a><img onclick="update('#redImg')" id="redImg" class="redshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a>
 					<a><img onclick="" id="redImgHist" class="redshadow" src="" width="100px"/></a>
 				</td>
 			</th>
@@ -487,44 +499,44 @@
 				<td align="center">
 					<table class="tftable" border="0" style="width:100%" align="center">>
 					<tr>
-						<th><a><img onclick="update('#img1')" id="img1" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img2')" id="img2" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img3')" id="img3" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img4')" id="img4" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img5')" id="img5" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img6')" id="img6" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img7')" id="img7" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img8')" id="img8" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img1')" id="img1" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img2')" id="img2" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img3')" id="img3" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img4')" id="img4" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img5')" id="img5" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img6')" id="img6" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img7')" id="img7" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img8')" id="img8" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
 					</tr>
 					<tr>
-						<th><a><img onclick="update('#img9')" id="img9" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img10')" id="img10" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img11')" id="img11" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img12')" id="img12" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img13')" id="img13" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img14')" id="img14" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img15')" id="img15" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img16')" id="img16" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img9')" id="img9" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img10')" id="img10" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img11')" id="img11" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img12')" id="img12" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img13')" id="img13" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img14')" id="img14" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img15')" id="img15" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img16')" id="img16" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
 					</tr>
 					<tr>
-						<th><a><img onclick="update('#img17')" id="img17" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img18')" id="img18" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img19')" id="img19" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img20')" id="img20" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img21')" id="img21" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img22')" id="img22" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img23')" id="img23" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img24')" id="img24" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img17')" id="img17" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img18')" id="img18" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img19')" id="img19" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img20')" id="img20" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img21')" id="img21" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img22')" id="img22" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img23')" id="img23" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img24')" id="img24" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
 					</tr>
 					<tr>
-						<th><a><img onclick="update('#img25')" id="img25" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img26')" id="img26" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img27')" id="img27" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img28')" id="img28" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img29')" id="img29" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img30')" id="img30" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img31')" id="img31" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
-						<th><a><img onclick="update('#img32')" id="img32" class="imagedropshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img25')" id="img25" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img26')" id="img26" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img27')" id="img27" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img28')" id="img28" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img29')" id="img29" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img30')" id="img30" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img31')" id="img31" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
+						<th><a><img onclick="update('#img32')" id="img32" class="imagedropshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a></th>
 					</tr>
 					</table>
 				</td>
@@ -532,7 +544,7 @@
 			<th width="auto" height="100%" class="right_border">
 				<td align="center">
 					<font size="15" color="blue">BLUE</font>
-					<a><img onclick="update('#blueImg')" id="blueImg" class="blueshadow" src="" width="155px" height="155px" style="border-radius: 50%"/></a>
+					<a><img onclick="update('#blueImg')" id="blueImg" class="blueshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a>
 					<a><img onclick="" id="blueImgHist" class="blueshadow" src="" width="100px"/></a>
 				</td>
 			</th>
@@ -547,11 +559,10 @@
 		</section>
 		<h2 style="color: #FFFFEB">Segments Matching<span>Idan Izhaki @ UCSD</span></h2>
 
-		<div class="social">
-			<a class="twitter" href="http://twitter.com/idan192" style="background-image: url(../images/twitter.png)" data-username="idan192">...........</a>
-			<a class="linkedin" href="http://linkedin.com/in/idan192" style="background-image: url(../images/linkedin.png)" data-username="229841078">...........</a>
-			<a class="github" href="http://github.com/idan192" style="background-image: url(../images/github.png)">...........</a>
-			<a class="email" href="mailto:iizhaki@eng.ucsd.edu" style="background-image: url(../images/email.png)">...........</a>
+			<a class="twitter" href="http://twitter.com/idan192" target="_blank"><img src="images/twitter.png" width="30px"/></a>
+			<a class="linkedin" href="https://www.linkedin.com/profile/view?id=229841078" target="_blank"><img src="images/linkedin.png" width="30px"/></a>
+			<a class="github" href="http://github.com/idan192" target="_blank"><img src="images/github.png" width="30px"/></a>
+			<a class="email" href="mailto:iizhaki@eng.ucsd.edu" target="_blank"><img src="images/email.png" width="30px"/></a>
 		</div>
 	</div>
 	<div id="guide" style="display:none">
@@ -594,8 +605,8 @@
 	</div>
 					
 	<div id="waiter" style="position:absolute; display:block">
-		<div id="backgroundPopup" style="height: 100%; opacity: 0.8; display: block; z-index: 500">
-			<div style="position: absolute; top: 50%; left: 50%; margin-left: -50px;  
+		<div id="backgroundPopup" style="height: 100%; opacity: 0.9; display: block; z-index: 500">
+			<div style="position: absolute; top: 50%; left: 50%; margin-left: -100px;  
 						margin-top: -25px; font-size:xx-large; text-align:center; line-height: 130%">
 				Loading page. <br/> Please wait... <br/>
 				<img src="images/wait.gif" style="height:50px;margin-top: 12.5px;margin-botton:12.5px;"/>
@@ -608,7 +619,7 @@
 			<canvas id="myCanvas1" width="800px" style="border:15px solid #A65200; width='100%'; border-radius: 20px; z-index: 100"> Your browser does not support the HTML5 canvas tag.</canvas>
 			<canvas id="myCanvas2" width="800px" style="border:15px solid #A65200; width='100%'; border-radius: 20px; z-index: 100"> Your browser does not support the HTML5 canvas tag.</canvas>
 		</div>
-		<div id="backgroundPopup" style="height: 100%; opacity: 0.8; display: block; z-index: 3"/>
+		<div id="backgroundPopup" style="height: 100%; opacity: 0.9; display: block; z-index: 3"/>
 	</div>
 </body>
 

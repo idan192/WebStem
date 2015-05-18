@@ -206,6 +206,10 @@
 									addCircle(fName, "black", 1, false);
 								}
 							}
+							
+							addCircle(path + data[3], "gold", 0, false);
+							addCircle(path + data[4], "gold", 1, false);
+							
 							//redrawAll();
 							//data = info;
 							myCanvas();
@@ -267,22 +271,22 @@
 				if (tag == '#redImg') {
 					theSrc = $('#redImg').attr('src');
 					if (theSrc.indexOf(refA) >= 0) {
-						addCircle(theSrc, "red", 0, true)
+						addCircle(theSrc, "gold", 0, true)
 					} else {
-						addCircle(theSrc, "red", 1, true)
+						addCircle(theSrc, "gold", 1, true)
 					}
-					delCircle($('#blueImg').attr('src'));
+					//delCircle($('#blueImg').attr('src'));
 					$('#redImg').attr('class', "redclicked");
 					$('#blueImg').attr('class', "blueshadow");
 					marked = 1;
 				} else {
 					theSrc = $('#blueImg').attr('src');
 					if (theSrc.indexOf(refA) >= 0) {
-						addCircle(theSrc, "blue", 0, true)
+						addCircle(theSrc, "gold", 0, true)
 					} else {
-						addCircle(theSrc, "blue", 1, true)
+						addCircle(theSrc, "gold", 1, true)
 					}
-					delCircle($('#redImg').attr('src'));
+					//delCircle($('#redImg').attr('src'));
 					$('#redImg').attr('class', "redshadow");
 					$('#blueImg').attr('class', "blueclicked");
 					marked = 2;
@@ -490,9 +494,9 @@
 	
 	<div id="shower" style="position:block; display:none">
 		<div style="position:fixed; top: 45%; left: 50%; margin: -350px 0 0 -350px; z-index: 10">  
-			<canvas id="myCanvas1" width="700px" style="border:15px solid #A65200; border-radius: 20px; z-index: 2"> Your browser does not support the HTML5 canvas tag.</canvas>
+			<canvas id="myCanvas1" width="700px" style="border:15px solid darkred; border-radius: 20px; z-index: 2"> Your browser does not support the HTML5 canvas tag.</canvas>
 			<br/>
-			<canvas id="myCanvas2" width="700px" style="border:15px solid #A65200; border-radius: 20px; z-index: 2"> Your browser does not support the HTML5 canvas tag.</canvas>
+			<canvas id="myCanvas2" width="700px" style="border:15px solid darkblue; border-radius: 20px; z-index: 2"> Your browser does not support the HTML5 canvas tag.</canvas>
 		</div>
 		<div id="backgroundPopup" style="opacity: 0.9; display: block; z-index: 2; height: 120%"></div>
 	</div>
@@ -507,7 +511,7 @@
 				<td align="center"> 
 					<font size="15" color="red">RED</font>
 					<a><img onclick="update('#redImg')" id="redImg" class="redshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a>
-					<a><img onclick="" id="redImgHist" class="redshadow" src="" width="100px"/></a>
+					<a><img onclick="update('#redImg')" id="redImgHist" class="redshadow" src="" width="100px"/></a>
 				</td>
 			</th>
 			<th width="auto" height="100%" class="right_border">
@@ -560,7 +564,7 @@
 				<td align="center">
 					<font size="15" color="blue">BLUE</font>
 					<a><img onclick="update('#blueImg')" id="blueImg" class="blueshadow" src="" width="160px" height="160px" style="border-radius: 50%"/></a>
-					<a><img onclick="" id="blueImgHist" class="blueshadow" src="" width="100px"/></a>
+					<a><img onclick="update('#blueImg')" id="blueImgHist" class="blueshadow" src="" width="100px"/></a>
 				</td>
 			</th>
 		</tr>

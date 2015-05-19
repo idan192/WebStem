@@ -90,11 +90,13 @@
 			
 			if (getCookie("pageNum") == "") {
 				pageNum = 0;
+				cntGroups = 0;
 			} else {
 				pageNum = parseInt(getCookie("pageNum"));
+				cntGroups = parseInt(getCookie("cntGroups"));
 			}
 			
-			if (!b && pageNum > cntGroups) {
+			if ((b && cntGroups <= 0) || (pageNum > cntGroups)) {
 				pageNum = 0;
 				b = true;
 			}
@@ -120,6 +122,8 @@
 					success: function(realData) {
 						allSrcs = realData.srcs;
 						cntGroups = realData.grps;
+						setCookie("cntGroups", cntGroups, 100);
+						
 						logFile = 0;
 						setCookie("fileName", realData.user, 100);
 						$('#page').text("[Page " + pageNum + " of " + cntGroups + "]");
@@ -139,6 +143,9 @@
 				$('#blueImg').attr('class', "blueshadow");
 				$('#redImg').attr('class', "redshadow");
 				var comment = $("#comment").attr('value')		
+				if (comment == "Write comment here...") {
+					comment = "";
+				}
 				var realName = getCookie("fileName");
 				var send = {isSubmit: true, user: realName, log: logFile, comm: comment, src: "", mark: ""};
 				$.ajax({
@@ -148,7 +155,7 @@
 				});
 				
 				marked = 0;
-				$("#comment").attr('value', "")
+				$("#comment").attr('value', "Write comment here...")
 				logFile++;
 			}
 			
@@ -193,7 +200,11 @@
 							$("#blueImgHist").attr('src', path + data[6]);
 							$("#blueImgHist").load(tillLoad);
 							
-							refA = "ref_" + mainImage1.substring(4) + "_";
+							try {
+								refA = "ref_" + mainImage1.substring(4) + "_";
+							} catch(err) {
+								return;
+							}
 							
 							for (var i = 7; i < len + 7; i++) {
 								fName = path + data[i];
@@ -240,6 +251,7 @@
 			setCookie("userName", "", -1);
 			setCookie("pageNum", "", -1);
 			setCookie("fileNum", "", -1);
+			setCookie("cntGroups", "", -1);
 			pageNum = logFile = data = 0;
 			b = true;
 			updater();
@@ -476,14 +488,14 @@
 <body onLoad="ZoomScreen100(); updater()" style="overflow-x: hidden; width: 1920px; height: 1080px">
 	<img id="mainImg1" src="" style="display:none"/>
 	<img id="mainImg2" src="" style="display:none"/>
-	<div class="ryan" align="center" style="width:1920px; margin: 0px: top: 0px: height: 1080px;"; margin: 0px">
+	<div class="ryan" align="center" style="width:1920px; margin: 0px 0px 0px 0px: top: 0px: height: 1080px;"; margin: 0px">
 			<p align="center" id="userName" style="color:white; display: inline">Please login</p></th>
 			||| <p align="center" id="page" style="color:white; display: inline"></p>
 		<p align="center" style="color:grey; cursor:pointer" onclick="cleanSession()">[Logout]</p>
 	</div>
 	
-	<div id="waiter" style="position:block; display:block">
-		<div id="backgroundPopup" style="opacity: 0.9; display: block; z-index: 2; height: 100%; width: 100%">
+	<div id="waiter" style="position:fixed; display:block">
+		<div id="backgroundPopup" style="position: fixed; opacity: 0.9; display: block; z-index: 2; height: 113%; width: 100%">
 			<div style="position: fixed; top: 30%; left: 50%; margin-left: -100px;
 						margin-top: -25px; font-size:xx-large; text-align:center; line-height: 130%">
 				Loading page. <br/> Please wait... <br/>
@@ -492,13 +504,18 @@
 		</div>
 	</div>
 	
-	<div id="shower" style="position:block; display:none">
-		<div style="position:fixed; top: 45%; left: 50%; margin: -350px 0 0 -350px; z-index: 10">  
-			<canvas id="myCanvas1" width="700px" style="border:15px solid darkred; border-radius: 20px; z-index: 2"> Your browser does not support the HTML5 canvas tag.</canvas>
+	<div id="shower" style="position:fixed; display:none; z-index: 3; width: 1920px">
+		<div id="container" style="position: fixed; background-color: transparent; margin: -50px 0px 0px 0px">
+			<section style="text-align: center; left: 50%">
+			<canvas id="myCanvas1" width="750px" style="border:15px solid darkred; opacity: 1; border-radius: 20px; z-index: 100"> Your browser does not support the HTML5 canvas tag.</canvas>
 			<br/>
-			<canvas id="myCanvas2" width="700px" style="border:15px solid darkblue; border-radius: 20px; z-index: 2"> Your browser does not support the HTML5 canvas tag.</canvas>
+			<canvas id="myCanvas2" width="750px" style="border:15px solid darkblue; opacity: 1; border-radius: 20px; z-index: 100"> Your browser does not support the HTML5 canvas tag.</canvas>
+			<br/>
+			<img src="images/continue.png" style="cursor: pointer"/>
+			</section>
 		</div>
-		<div id="backgroundPopup" style="opacity: 0.9; display: block; z-index: 2; height: 120%"></div>
+		<div id="backgroundPopup" style="position: fixed; opacity: 0.9; display: block; z-index: 2; height: 113%; width: 100%">
+		</div>
 	</div>
 	
 	<div id="container" align="center" style="display: block; width:92%; margin: 0px; margin-left: 80px; margin-right: 80px; padding-right: -80px; top: 0px; height:1080px;
@@ -573,8 +590,10 @@
 		<input id="transit" type="checkbox" style="vertical-align: middle; width: 25px" name="transit" align="middle" checked><font color="white">Global-View Page</font></input></br>
 		
 		<font color="white">Please enter description for selection:</front></br>
-		<textarea id="comment" name="myTextBox" style="width:70%;height:100px;border:5px solid #000;border-bottom-left-radius: 35px;border-color: #A65200;
-						border-radius: 35px;font-size: 1.5em; padding:20px; line-height: 120%; background: #FFFFEB" with="50%"></textarea>
+		<input type"text" id="comment" value="Write comment here..." name="myTextBox" style="width:70%;height:100px;border:5px solid #000;border-bottom-left-radius: 35px;border-color: #A65200;
+						border-radius: 35px;font-size: 1.5em; padding:20px; line-height: 120%; background: #FFFFEB" with="50%"
+						onfocus="javascript:if(this.value == 'Write comment here...') 
+								 this.value=''" onblur="javascript:if(this.value == '') this.value='Write comment here...'"></textarea> 						
 		</section>
 		<h2 style="color: #FFFFEB">Segments Matching<span>Idan Izhaki @ UCSD</span></h2>
 

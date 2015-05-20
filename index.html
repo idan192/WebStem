@@ -50,7 +50,7 @@
 	</script>
 
 	<script> 
-		var b = true;
+		var b = 0;
 		var len = 32;
 		var path = "";
 		var pageNum = 0;
@@ -96,20 +96,20 @@
 				cntGroups = parseInt(getCookie("cntGroups"));
 			}
 			
-			if ((b && cntGroups <= 0) || (pageNum > cntGroups)) {
+			if ((!b && cntGroups <= 0) || (pageNum > cntGroups)) {
 				pageNum = 0;
-				b = true;
+				b = 0;
 			}
 			
-			if (b) {	
+			if (!b) {	
+				$("#shower").hide();
 				if (pageNum == 0) {
-					pageNum = (pageNum + 1);
+					pageNum = 1;
 				}
-				b = false;
+				b = 1;
 				if (pageNum <= 1) {
 					$("#guide").show();
 				}
-				$("#shower").hide();
 				var userName = getCookie("userName");
 				while (userName == "" || userName == null) {
 					userName = setUserName();
@@ -132,8 +132,9 @@
 						totalFull = Object.keys(allSrcs).max;
 						$('#waiter').show();
 						for (var k in allSrcs) {
-							$('<img id="org_' + k + '"/>').attr('src', "/photos/" + allSrcs[k]).appendTo('body').css('display','none');
-							$('#org_' + k).load(tillLoad);
+							var div = '<img id="org_' + k + '"/>';
+							$(div).appendTo('body').css('display','none');
+							changeSrc("#org_" + k, "/photos/" + allSrcs[k]);
 						}
 						//while (fullCntr < totalFull);
 					}					
@@ -160,92 +161,91 @@
 			}
 			
 			if ($("#transit").attr('checked')) {
-				$("#shower").click(function() {
-					$.ajax({
-						type: 'GET',
-						cache: 'false',
-						data: {num: len, page: pageNum},
-						url: 'newImage',
-						success: function(data) {
-							/*if (data == 0) {
-								data = info;
-								warmup();
-								updater();
-								return;
-							} else {
-								preload(info, "img_", len + 6);
-							}*/
-							
-							marked = 0;
-							for (var v in selected) {
-								selected[v] = false;
-								$(v).attr('class', "imagedropshadow");
-							}
-							circles = {};
-							
-							// Data size is len + 7 (path, org1, org2, ref1, ref2, hist1, hist2, len * imgs)
-							//data = info;
-							path = data[0];
-							mainImage1 = data[1];
-							mainImage2 = data[2];
-							
-							$("#shower").hide();
-							$("#waiter").show();
-							$("#redImg").attr('src', path + data[3]);
-							$("#redImg").load(tillLoad);
-							$("#blueImg").attr('src', path + data[4]);
-							$("#blueImg").load(tillLoad);
-							$("#redImgHist").attr('src', path + data[5]);
-							$("#redImgHist").load(tillLoad);
-							$("#blueImgHist").attr('src', path + data[6]);
-							$("#blueImgHist").load(tillLoad);
-							
-							try {
-								refA = "ref_" + mainImage1.substring(4) + "_";
-							} catch(err) {
-								return;
-							}
-							
-							for (var i = 7; i < len + 7; i++) {
-								fName = path + data[i];
-								imgDiv = "#img" + (i - 6);
-								$(imgDiv).attr('src', fName);
-								$(imgDiv).load(tillLoad);
-								if (data[i].indexOf(refA) >= 0) {
-									addCircle(fName, "black", 0, false);
-								} else {
-									addCircle(fName, "black", 1, false);
-								}
-							}
-							
-							addCircle(path + data[3], "gold", 0, false);
-							addCircle(path + data[4], "gold", 1, false);
-							
-							//redrawAll();
-							//data = info;
-							myCanvas();
-							if (cntGroups > 0 && pageNum > cntGroups) {
-								alert("Thank you for participating!");
-								cleanSession();
-								location.reload();
-								return;
-							}
-						}
-					});
-				});
 				if (logFile >= 1) {
 					$("#shower").show();
 					myCanvas();
 				} else {
-					$("#shower").trigger("click");
+					//$("#buttDone").trigger("click");
+					advance();
 				}
 			} else {
-				$("#shower").trigger("click");
+				//$("#buttDone").trigger("click");
+				advance();
 			}
 			
 			$('#page').text("Page " + pageNum + " of " + cntGroups);
 			setCookie("pageNum", pageNum, 100);
 		};
+		
+		function advance() {
+			$.ajax({
+				type: 'GET',
+				cache: 'false',
+				data: {num: len, page: pageNum},
+				url: 'newImage',
+				success: function(data) {
+					//console.log(1);
+					/*if (data == 0) {
+						data = info;
+						warmup();
+						updater();
+						return;
+					} else {
+						preload(info, "img_", len + 6);
+					}*/
+					
+					marked = 0;
+					for (var v in selected) {
+						selected[v] = false;
+						$(v).attr('class', "imagedropshadow");
+					}
+					circles = {};
+					
+					// Data size is len + 7 (path, org1, org2, ref1, ref2, hist1, hist2, len * imgs)
+					//data = info;
+					path = data[0];
+					mainImage1 = data[1];
+					mainImage2 = data[2];
+					
+					$("#shower").hide();
+					$("#waiter").show();
+					changeSrc("#redImg", path + data[3]);
+					changeSrc("#blueImg", path + data[4]);
+					changeSrc("#redImgHist", path + data[5]);
+					changeSrc("#blueImgHist", path + data[6]);
+					
+					try {
+						refA = "ref_" + mainImage1.substring(4) + "_";
+					} catch(err) {
+						return;
+					}
+					
+					for (var i = 7; i < len + 7; i++) {
+						fName = path + data[i];
+						imgDiv = "#img" + (i - 6);
+						changeSrc(imgDiv, fName);
+						if (data[i].indexOf(refA) >= 0) {
+							addCircle(fName, "black", 0, false);
+						} else {
+							addCircle(fName, "black", 1, false);
+						}
+					}
+					
+					addCircle(path + data[3], "gold", 0, false);
+					addCircle(path + data[4], "gold", 1, false);
+					
+					//redrawAll();
+					//data = info;
+					myCanvas();
+					if (cntGroups > 0 && pageNum > cntGroups) {
+						alert("Thank you for participating!");
+						cleanSession();
+						location.reload();
+						return;
+					}
+				}
+			});
+		}
 		
 		function cleanSession() {
 			setCookie("userName", "", -1);
@@ -475,12 +475,16 @@
 		
 		function tillLoad() {
 			++waitCntr;
-			if (waitCntr >= 38) {
-				setTimeout(function() {
-					waitCntr = 0;
-					$("#waiter").hide();
-				}, 300);
+			if ((b <= 1 && waitCntr >= 66) || (b > 1 && waitCntr >= 36)) {
+				b = 2;
+				waitCntr = 0;
+				$("#waiter").hide();
 			}
+		}
+		
+		function changeSrc(div, src) {
+			$(div).unbind("load");
+			$(div).attr('src', src).load(tillLoad);
 		}
 </script>
 </head>
@@ -511,7 +515,7 @@
 			<br/>
 			<canvas id="myCanvas2" width="750px" style="border:15px solid darkblue; opacity: 1; border-radius: 20px; z-index: 100"> Your browser does not support the HTML5 canvas tag.</canvas>
 			<br/>
-			<img src="images/continue.png" style="cursor: pointer"/>
+			<img src="images/continue.png" id="buttDone" style="cursor: pointer" onClick="advance()"/>
 			</section>
 		</div>
 		<div id="backgroundPopup" style="position: fixed; opacity: 0.9; display: block; z-index: 2; height: 113%; width: 100%">
@@ -640,18 +644,7 @@
 		</br>
 		<img src="images/continue.png" style="cursor: pointer" onclick="hideGuide()"/>
 		</div>
-		
 	</div>
-	
-	
-	<div id="shower" style="position:fixed; display:none">
-		<div style="position:fixed; top: 50%; left: 50%; margin: -400px 0 0 -400px; z-index: 10; height: 120%">  
-			<canvas id="myCanvas1" width="400px" style="border:15px solid #A65200; width='100%'; border-radius: 20px; z-index: 100"> Your browser does not support the HTML5 canvas tag.</canvas>
-			<canvas id="myCanvas2" width="400px" style="border:15px solid #A65200; width='100%'; border-radius: 20px; z-index: 100"> Your browser does not support the HTML5 canvas tag.</canvas>
-		</div>
-		<div id="backgroundPopup" style="height: 1080px; opacity: 0.9; display: block; z-index: 3"/>
-	</div>
-	
 </body>
 
 </html>

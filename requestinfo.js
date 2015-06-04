@@ -94,7 +94,7 @@ function randomNumbers(size) {
 function getRandImages(len, page) {
 	page = page - 1;
 	len = parseInt(len);
-	getNextList(6, len, page);
+	getNextList(7, len, page);
 	var toRemove = [];
 	var res = [];
 	res.length = len + 7;
@@ -105,9 +105,9 @@ function getRandImages(len, page) {
 	res[4] = files[3];
 	res[5] = files[0];
 	res[6] = files[1];
-			 
-	for (var i = 6; i < len + 6; ++i) {
-		res[i + 1] = files[i];
+
+	for (var i = 7; i < len + 7; ++i) {
+		res[i] = files[i];
 	}
 	return res;
 } 

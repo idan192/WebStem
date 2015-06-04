@@ -8,12 +8,13 @@ var bodyParser = require('body-parser');
 var app = express();
 var server = http.createServer(app);
 
-var port = 8081;
+var ismain = __dirname.indexOf("-MAIN") > -1;
+var port = ismain ? 8080 : 8081;
 var url  = 'http://localhost:' + port + '/';
 var randImages = [];
 var logFiles = {};
 
-
+console.log("Main service: " + ismain);
 server.listen(port);
 console.log(url);
 

@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,6 +23,7 @@
 	</style>
 
 	<script>	
+		<!-- This sections exposes interfaces for cookies manipulation -->
 		function setUserName() {
 			var userName = prompt("Please type your name:", "");
 			setCookie("userName", userName, 100);
@@ -50,15 +50,18 @@
 	</script>
 
 	<script> 
-		var rdy = false;
-		var len = 32;
-		var path = "";
+		<!-- Main front-end code -->
+		var loadedOnce = false;
+		var totalImages = 32;
+		var fullPath = "";
 		var marked = 0;
 		var circles = {};
 		var mainImage1 = "";
 		var mainImage2 = "";
-		var refA = "";
+		var redForRed = "";
 		var waitCntr = 0;
+		
+		<!-- A way to distinguish between images we want to allow logging and not allow that -->
 		var selected = {"#img1":false, "#img2":false, "#img3":false, "#img4":false, "#img5":false, "#img6":false, 
 						"#img7":false, "#img8":false, "#img9":false, "#img10":false, "#img11":false, "#img12":false, 
 						"#img13":false, "#img14":false, "#img15":false, "#img16":false, "#img17":false, "#img18":false, 
@@ -66,21 +69,17 @@
 						"#img25":false, "#img26":false, "#img27":false, "#img28":false, "#img29":false, "#img30":false, 
 						"#img31":false, "#img32":false};
 		
-		function mapClone(mmap) {
-			var newMap = {};
-			for (var i in mmap)
-				newMap[i] = mmap[i];
-			return newMap;
-		}
-		
+		<!-- First time loading a page - we want to prefetch some data -->
 		function firstLoad() {
+			<!-- Continue previous page if can -->
 			if (getCookie("pageNum") == "") {
 				var pageNum = 1;
 			} else {
 				var pageNum = parseInt(getCookie("pageNum"));
 			}
 			
-			var version = "v10.3";
+			<!-- Clean cookies when version changes -->
+			var version = "v10.5";
 			var siteVer = getCookie("siteVersion");
 			if (siteVer == "") {
 				setCookie("siteVersion", version, 100);
@@ -90,16 +89,20 @@
 				return;
 			}
 			
+			<!-- Update next page counter -->
 			setCookie("pageNum", pageNum, 100);
 			if (pageNum <= 1) {
 				$("#guide").show();
 			}
+			
+			<!-- Make sure username exiss -->
 			var userName = getCookie("userName");
 			while (userName == "" || userName == null) {
 				userName = setUserName();
 			}
 			$('#userName').text("Logged in as: " + userName);
 			
+			<!-- Prefetch big images and other data for later use -->
 			$.ajax({
 				type: "GET",
 				url: "newUser",
@@ -123,11 +126,14 @@
 			});
 		}
 		
+		<!-- Every time a page is logged -->
 		function logToNextPage() { 
+			<!-- Shower should be invisible (accidental space key press?) -->
 			if ($("#shower").is(":visible")) {
 				return;
 			}
 
+			<!-- Invalid data, may be updated groups data in back-end -->
 			var pageNum = parseInt(getCookie("pageNum"));
 			var cntGroups = parseInt(getCookie("cntGroups"));
 			if (pageNum > cntGroups) {
@@ -135,23 +141,19 @@
 				return;
 			}
 			
+			<!-- Reset stuff -->
 			$('#blueImg').attr('class', "blueshadow");
 			$('#redImg').attr('class', "redshadow");
 			var comment = $("#comment").attr('value')		
 			if (comment == "Write comment here...") {
 				comment = "";
 			}
-			var realName = getCookie("fileName");
-			var send = {isSubmit: true, user: realName, log: pageNum, comm: comment, src: "", mark: ""};
-			$.ajax({
-				type: "POST",
-				url: "data",
-				data: send
-			});
+
+			<!-- Log command 'submitted' -->
+			logCommand(true, comment, "", "");
 			
 			marked = 0;
-			$("#comment").attr('value', "Write comment here...")
-			
+			$("#comment").attr('value', "Write comment here...");
 			
 			pageNum = (pageNum + 1);
 			$('#page').text("Page " + pageNum + " of " + cntGroups);
@@ -165,12 +167,14 @@
 			}
 		};
 		
+		<!-- Every time page is loaded -->
 		function loadNextStack() {
 			var pageNum = parseInt(getCookie("pageNum"));
+			<!-- Load reference images and center images -->
 			$.ajax({
 				type: 'GET',
 				cache: 'false',
-				data: {num: len, page: pageNum},
+				data: {num: totalImages, page: pageNum},
 				url: 'newImage',
 				success: function(data) {					
 					marked = 0;
@@ -180,29 +184,29 @@
 						$(v).attr('class', "imagedropshadow");
 					}
 					
-					// Data size is len + 7 (path, org1, org2, ref1, ref2, hist1, hist2, len * imgs)
-					path = data[0];
+					// Data size is totalImages + 7 (fullPath, org1, org2, ref1, ref2, hist1, hist2, totalImages * imgs)
+					fullPath = data[0];
 					mainImage1 = data[1];
 					mainImage2 = data[2];
 					
 					$("#shower").hide();
 					$("#waiter").show();
-					changeSrc("#myPreview", path + "previewer", "", -1);
-					changeSrc("#redImg", path + data[3], "gold", 0);
-					changeSrc("#blueImg", path + data[4], "gold", 1);
-					changeSrc("#redImgHist", path + data[5], "", -1);
-					changeSrc("#blueImgHist", path + data[6], "", -1);
+					changeSrc("#myPreview", fullPath + "previewer", "", -1);
+					changeSrc("#redImg", fullPath + data[3], "gold", 0);
+					changeSrc("#blueImg", fullPath + data[4], "gold", 1);
+					changeSrc("#redImgHist", fullPath + data[5], "", -1);
+					changeSrc("#blueImgHist", fullPath + data[6], "", -1);
 					
 					try {
-						refA = "ref_" + mainImage1.substring(4) + "_";
+						redForRed = "ref_" + mainImage1.substring(4) + "_";
 					} catch(err) {
 						return;
 					}
 					
-					for (var i = 7; i < len + 7; i++) {
-						fName = path + data[i];
+					for (var i = 7; i < totalImages + 7; i++) {
+						fName = fullPath + data[i];
 						imgDiv = "#img" + (i - 6);
-						if (data[i].indexOf(refA) >= 0) {
+						if (data[i].indexOf(redForRed) >= 0) {
 							changeSrc(imgDiv, fName, "black", 0);
 						} else {
 							changeSrc(imgDiv, fName, "black", 1);
@@ -217,10 +221,14 @@
 					}
 					myCanvas();			
 					$("#previewer").show();					
+					
+					logCommand(false, "", fullPath + data[3], "gold red"); 
+					logCommand(false, "", fullPath + data[4], "gold blue");
 				}
 			});
 		}
 		
+		<!-- Clear all interesting cookies and reset page number. Reload page -->
 		function cleanSession() {
 			setCookie("userName", "", -1);
 			setCookie("pageNum", "", -1);
@@ -232,20 +240,7 @@
 			return;
 		}
 		
-		function preload(arrayOfImages, pref, i) {
-			if (i <= 0) {
-				return;
-			}
-			$("#" + pref + i).attr('src', arrayOfImages[0] + arrayOfImages[i]);
-			preload(arrayOfImages, pref, i - 1);
-		}
-		
-		function warmup() {
-		    for (var i = 1; i <= len + 6; i++) {
-				$('<img id="img_' + i + '"/>').attr('src', "").appendTo('body').css('display','none');
-			}
-		}
-		
+		<!-- Every time an image is clicked - log it and update halos -->
 		function update(tag) {
 			if (typeof String.prototype.contains != 'function') {
 			  // see below for better implementation!
@@ -257,7 +252,7 @@
 			if (selected[tag] == undefined) {
 				if (tag == '#redImg') {
 					theSrc = $('#redImg').attr('src');
-					if (theSrc.indexOf(refA) >= 0) {
+					if (theSrc.indexOf(redForRed) >= 0) {
 						addCircle(theSrc, "gold", 0, true)
 					} else {
 						addCircle(theSrc, "gold", 1, true)
@@ -267,7 +262,7 @@
 					marked = 1;
 				} else {
 					theSrc = $('#blueImg').attr('src');
-					if (theSrc.indexOf(refA) >= 0) {
+					if (theSrc.indexOf(redForRed) >= 0) {
 						addCircle(theSrc, "gold", 0, true)
 					} else {
 						addCircle(theSrc, "gold", 1, true)
@@ -286,14 +281,14 @@
 					if (marked == 0) {
 						return;
 					} else if (marked == 1) {
-						if (theSrc.indexOf(refA) >= 0) {
+						if (theSrc.indexOf(redForRed) >= 0) {
 							addCircle(theSrc, "red", 0, true)
 						} else {
 							addCircle(theSrc, "red", 1, true)
 						}
 						$(tag).attr('class', "redclicked");
 					} else {
-						if (theSrc.indexOf(refA) >= 0) {
+						if (theSrc.indexOf(redForRed) >= 0) {
 							addCircle(theSrc, "blue", 0, true)
 						} else {
 							addCircle(theSrc, "blue", 1, true)
@@ -305,6 +300,7 @@
 			}
 		}
 		
+		<!-- Perfect resize for any resolution and window size -->
 		window.onresize = ZoomScreen100;		
 		var widths = [0, 0];
 		var heights = [0, 0]
@@ -320,6 +316,7 @@
 			return splitted.splice(splitted.length - 4, 3);
 		}
 		
+		<!-- Updates the canvases with all the circles of superpixels -->
 		function myCanvas() {
 			var fullImage1 = document.getElementById(mainImage1);	
 			var fullImage2 = document.getElementById(mainImage2);	
@@ -354,7 +351,7 @@
 			dims = parseDims(img);
 			x = dims[0]; y = dims[1]; r = dims[2];
 			if (widths[0] == 0) {
-				alert("CANNOT BE 0");
+				alert("Error. Page was loaded before images did.");
 			}
 			var ratio = cnvs[cv].height * 1.0 / heights[cv];
 			var centerX = x * ratio
@@ -366,14 +363,7 @@
 			circles[img] = toAdd;
 
 			if (logit) {
-				var realName = getCookie("fileName");
-				var pageNum = parseInt(getCookie("pageNum"));
-				var send = {isSubmit: false, user: realName, log: pageNum, comm: "", src: img, mark: color};
-				$.ajax({
-					type: "POST",
-					url: "data",
-					data: send
-				});
+				logCommand(false, "", img, color);
 			}
 		}
 		
@@ -384,8 +374,22 @@
 			var color = circles[img][3];
 			delete circles[img];
 			
+			logCommand(false, "", img, "uncheck " + color);
+		}
+		
+		<!-- A general log command helper function -->
+		function logCommand(toSbumit, theComment, theImage, theColor) {
 			var realName = getCookie("fileName");
-			var send = {isSubmit: false, user: realName, log: pageNum, comm: "", src: img, mark: "uncheck " + color};
+			var pageNum = parseInt(getCookie("pageNum"));
+			if (theColor == "gold") {
+				if (theImage == "redForRed") {
+					color = "gold red";
+				} else {
+					color = "gold blue";
+				}
+			}
+			var send = {isSubmit: toSbumit, user: realName, log: pageNum, 
+						comm: theComment, src: theImage, mark: theColor};
 			$.ajax({
 				type: "POST",
 				url: "data",
@@ -393,6 +397,7 @@
 			});
 		}
 		
+		<!-- Some parameters for circles-drawing -->
 		function redrawAll() {		
 			ctxs[0].drawImage(document.getElementById(mainImage1), 0, 0, cnvs[0].width, cnvs[0].height);
 			ctxs[1].drawImage(document.getElementById(mainImage2), 0, 0, cnvs[1].width, cnvs[1].height);
@@ -412,6 +417,7 @@
 			});
 		}
 		
+		<!-- Fixed screen size allows more flexibility in our website -->
 		function ZoomScreen100() {
 			var targetWidth = 1920.0;
 			var currentWidth = $(document.body).width();
@@ -433,13 +439,14 @@
 			$("#guide").hide();
 		}
 		
+		<!-- Counts photos successfully loaded. 28 = #sections  -->
 		function tillLoad() {
 			++waitCntr;
-			console.log(waitCntr);
-			if ((!rdy && waitCntr >= 29) || (rdy && waitCntr >= 37)) {
+			//console.log(waitCntr);
+			if ((!loadedOnce && waitCntr >= 28) || (loadedOnce && waitCntr >= (totalImages  + 4))) {
 				waitCntr = 0;
-				if (!rdy) {
-					rdy = true;
+				if (!loadedOnce) {
+					loadedOnce = true;
 					loadNextStack();
 				} else {
 					$("#waiter").hide();
@@ -447,6 +454,7 @@
 			}
 		}
 		
+		<!-- Wrapper for tillLoad to know when all photos were sucesfully loaded.  -->
 		function changeSrc(div, src, col, lbl) {
 			$(div).unbind("load");
 			if (lbl == -1) {

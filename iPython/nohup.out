@@ -1,0 +1,289 @@
+[I 19:21:54.258 NotebookApp] Using MathJax from CDN: https://cdn.mathjax.org/mathjax/latest/MathJax.js
+[W 19:21:54.547 NotebookApp] WARNING: The notebook server is listening on all IP addresses and not using encryption. This is not recommended.
+[W 19:21:54.547 NotebookApp] WARNING: The notebook server is listening on all IP addresses and not using authentication. This is highly insecure and not recommended.
+[I 19:21:54.548 NotebookApp] The port 8080 is already in use, trying another random port.
+[W 19:21:54.583 NotebookApp] Terminals not available (error was No module named terminado)
+[I 19:21:54.583 NotebookApp] Serving notebooks from local directory: /oasis/scratch/iizhaki/temp_project/WebStem/iPython
+[I 19:21:54.583 NotebookApp] 0 active kernels 
+[I 19:21:54.583 NotebookApp] The IPython Notebook is running at: http://[all ip addresses on your system]:8081/
+[I 19:21:54.583 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[I 19:21:58.301 NotebookApp] interrupted
+Serving notebooks from local directory: /oasis/scratch/iizhaki/temp_project/WebStem/iPython
+0 active kernels 
+The IPython Notebook is running at: http://[all ip addresses on your system]:8081/
+Shutdown this notebook server (y/[n])? Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/opt/python/lib/python2.7/threading.py", line 551, in __bootstrap_inner
+    self.run()
+  File "/opt/python/lib/python2.7/threading.py", line 504, in run
+    self.__target(*self.__args, **self.__kwargs)
+  File "/oasis/scratch/iizhaki/temp_project/PV/python-virtualEnv3/lib/python2.7/site-packages/IPython/html/notebookapp.py", line 951, in _confirm_exit
+    line = sys.stdin.readline()
+IOError: [Errno 9] Bad file descriptor
+
+[C 19:21:59.394 NotebookApp] received signal 2, stopping
+[I 19:21:59.400 NotebookApp] Shutting down kernels
+[I 19:22:23.363 NotebookApp] Using MathJax from CDN: https://cdn.mathjax.org/mathjax/latest/MathJax.js
+[W 19:22:23.630 NotebookApp] WARNING: The notebook server is listening on all IP addresses and not using encryption. This is not recommended.
+[W 19:22:23.631 NotebookApp] WARNING: The notebook server is listening on all IP addresses and not using authentication. This is highly insecure and not recommended.
+[I 19:22:23.631 NotebookApp] The port 8080 is already in use, trying another random port.
+[I 19:22:23.631 NotebookApp] The port 8081 is already in use, trying another random port.
+[W 19:22:23.662 NotebookApp] Terminals not available (error was No module named terminado)
+[I 19:22:23.662 NotebookApp] Serving notebooks from local directory: /oasis/scratch/iizhaki/temp_project/WebStem/iPython
+[I 19:22:23.662 NotebookApp] 0 active kernels 
+[I 19:22:23.662 NotebookApp] The IPython Notebook is running at: http://[all ip addresses on your system]:8082/
+[I 19:22:23.662 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[W 19:22:34.193 NotebookApp] Notebook SegmentsToJpg-Deterministic.ipynb is not trusted
+[I 19:22:35.715 NotebookApp] Kernel started: bd2b2266-0802-4605-b5ad-f574e2f3fdf6
+[I 19:24:35.716 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:24:35.719 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:26:35.700 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:26:35.702 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:30:04.707 NotebookApp] 302 GET / (128.54.37.252) 0.42ms
+[W 19:30:06.765 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/WebStem doesn't exist
+[W 19:30:06.765 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/yuncong doesn't exist
+[W 19:30:06.771 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/iPython doesn't exist
+[W 19:30:19.329 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/WebStem doesn't exist
+[W 19:30:19.330 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/yuncong doesn't exist
+[W 19:30:19.336 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/iPython doesn't exist
+[W 19:30:31.702 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/WebStem doesn't exist
+[W 19:30:31.703 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/yuncong doesn't exist
+[W 19:30:31.709 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/iPython doesn't exist
+[W 19:30:44.301 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/WebStem doesn't exist
+[W 19:30:44.301 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/yuncong doesn't exist
+[W 19:30:44.308 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/iPython doesn't exist
+[W 19:31:13.280 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/WebStem doesn't exist
+[W 19:31:13.280 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/yuncong doesn't exist
+[W 19:31:13.286 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/iPython doesn't exist
+[W 19:31:24.290 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/WebStem doesn't exist
+[W 19:31:24.291 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/yuncong doesn't exist
+[W 19:31:24.297 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/iPython doesn't exist
+[W 19:33:11.554 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/WebStem doesn't exist
+[W 19:33:11.555 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/yuncong doesn't exist
+[W 19:33:11.561 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/iPython doesn't exist
+[W 19:36:41.974 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/WebStem doesn't exist
+[W 19:36:41.974 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/yuncong doesn't exist
+[W 19:36:41.981 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/iPython doesn't exist
+[W 19:36:58.286 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/WebStem doesn't exist
+[W 19:36:58.287 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/yuncong doesn't exist
+[W 19:36:58.293 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/iPython doesn't exist
+[I 19:38:36.149 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:38:36.152 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:40:00.460 NotebookApp] Kernel restarted: bd2b2266-0802-4605-b5ad-f574e2f3fdf6
+[I 19:40:36.095 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:40:36.098 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:42:35.832 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:42:35.834 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:44:35.842 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:44:35.844 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:46:35.746 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:46:35.749 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:48:35.871 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:48:35.873 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:52:35.737 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:52:35.740 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[W 19:56:00.544 NotebookApp] WebSocket ping timeout after 119982 ms.
+[W 20:08:23.466 NotebookApp] Notebook SegmentsToJpg-Deterministic.ipynb is not trusted
+[I 20:08:53.271 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 20:08:53.274 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 20:10:28.414 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 20:10:28.421 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[W 20:13:32.052 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/WebStem doesn't exist
+[W 20:13:32.052 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/yuncong doesn't exist
+[W 20:13:32.058 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/iPython doesn't exist
+[W 20:13:44.878 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/WebStem doesn't exist
+[W 20:13:44.878 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/yuncong doesn't exist
+[W 20:13:44.884 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/iPython doesn't exist
+[W 20:14:59.421 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/WebStem doesn't exist
+[W 20:14:59.421 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/yuncong doesn't exist
+[W 20:14:59.427 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/iPython doesn't exist
+[W 20:37:26.831 NotebookApp] WebSocket ping timeout after 119891 ms.
+[W 20:52:25.712 NotebookApp] WebSocket ping timeout after 90000 ms.
+[W 21:10:06.905 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/WebStem doesn't exist
+[W 21:10:06.905 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/yuncong doesn't exist
+[W 21:10:06.911 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/iPython doesn't exist
+[I 21:15:09.171 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 21:15:09.174 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 21:17:07.231 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 21:17:07.233 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[W 21:40:12.315 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/WebStem doesn't exist
+[W 21:40:12.315 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/yuncong doesn't exist
+[W 21:40:12.321 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/iPython doesn't exist
+[W 21:45:53.996 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/WebStem doesn't exist
+[W 21:45:53.996 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/yuncong doesn't exist
+[W 21:45:54.002 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/iPython doesn't exist
+[W 22:00:48.223 NotebookApp] WebSocket ping timeout after 118111 ms.
+[W 22:17:42.226 NotebookApp] WebSocket ping timeout after 119997 ms.
+[W 22:37:10.115 NotebookApp] WebSocket ping timeout after 119975 ms.
+[I 23:06:02.066 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 23:06:02.068 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[W 23:06:04.135 NotebookApp] Notebook SegmentsToJpg-Deterministic.ipynb is not trusted
+[I 23:10:06.033 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 23:10:06.035 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 23:12:06.043 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 23:12:06.045 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 23:14:06.016 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 23:14:06.017 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 23:21:51.684 NotebookApp] Kernel started: 85803cdb-902d-4497-a218-330189441ad2
+..*
+optimization finished, #iter = 109
+obj = -0.000000, rho = -0.293352
+nSV = 16, nBSV = 0
+Total nSV = 16
+[I 23:23:51.757 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 23:34:07.211 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 23:34:07.213 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 23:38:07.194 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 23:38:07.196 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 23:40:07.168 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 23:40:07.170 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 23:41:49.390 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 23:41:49.392 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 23:42:07.223 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 23:42:07.224 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 23:55:59.319 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 23:57:59.499 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 23:59:59.196 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 00:01:59.257 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 00:05:59.592 NotebookApp] Saving file at /LabelsToTrain.ipynb
+*
+optimization finished, #iter = 9
+obj = -0.000000, rho = 1.003094
+nSV = 4, nBSV = 0
+Total nSV = 4
+[I 00:08:00.963 NotebookApp] Saving file at /LabelsToTrain.ipynb
+.*.*
+optimization finished, #iter = 118
+obj = -0.000000, rho = 0.881638
+nSV = 10, nBSV = 0
+Total nSV = 10
+[I 00:10:00.291 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 00:12:00.269 NotebookApp] Saving file at /LabelsToTrain.ipynb
+*
+optimization finished, #iter = 37
+obj = -0.000000, rho = 2.989675
+nSV = 5, nBSV = 0
+Total nSV = 5
+[I 00:14:00.393 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[W 00:25:56.456 NotebookApp] WebSocket ping timeout after 119997 ms.
+[W 00:26:05.971 NotebookApp] WebSocket ping timeout after 119991 ms.
+[I 01:25:07.711 NotebookApp] Kernel interrupted: 85803cdb-902d-4497-a218-330189441ad2
+[I 01:25:13.022 NotebookApp] Saving file at /LabelsToTrain.ipynb
+.*.*
+optimization finished, #iter = 118
+obj = -0.000000, rho = 0.881638
+nSV = 10, nBSV = 0
+Total nSV = 10
+[I 01:27:17.080 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 02:55:39.016 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 02:55:39.017 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[W 02:55:41.692 NotebookApp] Notebook SegmentsToJpg-Deterministic.ipynb is not trusted
+[I 02:57:43.561 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 02:57:43.563 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 02:58:43.962 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 02:58:43.964 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 03:19:46.170 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 03:19:46.171 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[W 03:39:13.546 NotebookApp] WebSocket ping timeout after 119928 ms.
+[W 03:39:17.057 NotebookApp] WebSocket ping timeout after 119885 ms.
+[W 04:51:51.729 NotebookApp] WebSocket ping timeout after 119899 ms.
+[W 04:52:18.109 NotebookApp] WebSocket ping timeout after 119878 ms.
+[W 05:17:07.384 NotebookApp] Notebook SegmentsToJpg-Deterministic.ipynb is not trusted
+[I 05:19:09.037 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 05:19:09.039 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 05:23:09.010 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 05:23:09.011 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 05:29:49.142 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 05:31:49.164 NotebookApp] Saving file at /LabelsToTrain.ipynb
+.*..*
+optimization finished, #iter = 109
+obj = -0.000000, rho = 2.356702
+nSV = 10, nBSV = 0
+Total nSV = 10
+[I 05:35:49.173 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 05:43:52.223 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 05:45:49.507 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 06:17:49.271 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 06:19:49.302 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 06:21:10.441 NotebookApp] 302 GET /notebooks/tmp.jpg (169.228.188.228) 1.42ms
+[W 06:21:12.022 NotebookApp] 404 GET /favicon.ico (169.228.188.228) 11.11ms referer=http://idanizhaki.me:8082/files/tmp.jpg
+[I 06:21:49.291 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 06:23:49.318 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 06:33:49.428 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 06:34:29.185 NotebookApp] 302 GET /notebooks/tmp.jpg (169.228.188.228) 2.23ms
+[I 06:35:34.806 NotebookApp] 302 GET /notebooks/tmp.jpg (169.228.188.228) 2.26ms
+[I 06:35:49.366 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 06:37:49.528 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 06:38:12.461 NotebookApp] 302 GET /notebooks/tmp.jpg (169.228.188.228) 1.41ms
+[I 06:38:56.517 NotebookApp] 302 GET /notebooks/tmp.jpg (169.228.188.228) 2.53ms
+[I 06:39:22.389 NotebookApp] 302 GET /notebooks/tmp.jpg (169.228.188.228) 1.40ms
+[I 06:39:49.448 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 06:40:17.300 NotebookApp] 302 GET /notebooks/tmp.jpg (169.228.188.228) 1.41ms
+[I 06:40:58.319 NotebookApp] 302 GET /notebooks/tmp.jpg (169.228.188.228) 1.40ms
+[I 06:41:49.450 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 06:43:44.644 NotebookApp] 302 GET /notebooks/tmp.jpg (169.228.188.228) 1.42ms
+[I 06:43:50.299 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 06:45:50.320 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 06:46:42.634 NotebookApp] 302 GET /notebooks/tmp.jpg (169.228.188.228) 2.43ms
+[I 06:46:50.700 NotebookApp] 302 GET /notebooks/tmp.jpg (169.228.188.228) 1.49ms
+[I 06:47:50.340 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 06:47:57.184 NotebookApp] 302 GET /notebooks/tmp.jpg (169.228.188.228) 1.42ms
+[I 06:48:34.283 NotebookApp] 302 GET /notebooks/tmp.jpg (169.228.188.228) 2.29ms
+[I 06:49:50.345 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[I 06:49:58.172 NotebookApp] 302 GET /notebooks/tmp.jpg (169.228.188.228) 1.43ms
+[I 06:51:50.354 NotebookApp] Saving file at /LabelsToTrain.ipynb
+[W 08:02:09.016 NotebookApp] WebSocket ping timeout after 119996 ms.
+[W 08:02:19.206 NotebookApp] WebSocket ping timeout after 119994 ms.
+[W 08:04:10.128 NotebookApp] WebSocket ping timeout after 119997 ms.
+[W 08:04:12.435 NotebookApp] WebSocket ping timeout after 119995 ms.
+[I 18:22:06.642 NotebookApp] 302 GET / (128.54.36.254) 0.38ms
+[W 18:22:08.208 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/WebStem doesn't exist
+[W 18:22:08.208 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/yuncong doesn't exist
+[W 18:22:08.214 NotebookApp] /oasis/scratch/iizhaki/temp_project/WebStem/iPython/iPython doesn't exist
+[W 18:22:12.808 NotebookApp] Notebook SegmentsToJpg-Deterministic.ipynb is not trusted
+[I 18:34:15.343 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 18:34:15.346 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 18:35:37.393 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 18:35:37.396 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 18:36:15.059 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 18:36:15.062 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 18:38:15.076 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 18:38:15.079 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 18:52:15.197 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 18:52:15.200 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 18:54:15.129 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 18:54:15.131 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 18:56:15.140 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 18:56:15.143 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 18:58:15.123 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 18:58:15.125 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:00:15.131 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:00:15.134 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:04:15.237 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:04:15.239 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:06:15.156 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:06:15.159 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:08:15.165 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:08:15.168 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:10:15.162 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:10:15.165 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:12:15.165 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:12:15.167 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:14:15.169 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:14:15.172 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:16:15.169 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:16:15.171 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:18:15.194 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:18:15.197 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:20:15.184 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:20:15.186 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:24:15.214 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:24:15.216 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:25:30.791 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:25:30.794 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:26:15.197 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:26:15.200 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:26:34.888 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:26:34.890 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[I 19:28:15.205 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
+[W 19:28:15.208 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb

@@ -2,20 +2,19 @@ var url = require("url");
 var fs = fs || require('fs');
 var path = require('path');
 var currDir, files;
-//var dirI;
 var allDirs;
 resetAll();
 
+// Resets a session. 
 function resetAll() {
 	console.log("* NodeJS resets *");
 	currDir = "";
 	files = [];
 	dirI = 0;
 	allDirs = getDirs("./photos/");
-	//console.log(allDirs);
-	//getNextList();
 }
 
+// Lists all groups in photos folder
 function getDirs(rootDir) {
     var allFiles = fs.readdirSync(rootDir);
     var dirs = [];
@@ -34,6 +33,7 @@ function getDirs(rootDir) {
     return dirs
 }
 
+// General shuffle function
 function shuffleArray(array, from, len) {
     for (var i = len - from; i >= 0; i--) {
         var j = Math.floor(Math.random() * (i + 1) + from);
@@ -44,22 +44,22 @@ function shuffleArray(array, from, len) {
     return array;
 }
 
+// Get next group
 function getNextList(skip, len, dirI) {
-    //dirI = getRandomInt(0, allDirs.length - 1);
 	if (dirI >= allDirs.length || dirI < 0) {
 		return;
 	}
 	currDir = allDirs[dirI];
 	files = fs.readdirSync("./photos/" + currDir);
-	//console.log(files);
 	shuffleArray(files, skip, len);
-	//dirI = (dirI + 1) % allDirs.length;
 }
 
+// Random integer in a range helper function
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// Count image  sources (correlates to number of sections)
 function countSources() {
 	var allFiles = fs.readdirSync("./photos/");
     var allSrcs = {};
@@ -78,19 +78,7 @@ function countSources() {
 	return {srcs: allSrcs, grps :cntGroups};
 }
 
-function randomNumbers(size) {
-	var lindex = new Array(size);
-	for (var i = 0; i < size; i++) {
-		var newRand = getRandomInt(0, files.length - 1);
-		if (newRand in lindex) {
-		    i--;
-		} else {
-			lindex[i] = newRand;
-		}
-	}
-    return lindex;
-}
-
+// Get N number of random images from a page (next group)
 function getRandImages(len, page) {
 	page = page - 1;
 	len = parseInt(len);

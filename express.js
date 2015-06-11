@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var app = express();
 var server = http.createServer(app);
 
+// Main folder gets port 8080, otherwise gets 8081
 var ismain = __dirname.indexOf("-MAIN") > -1;
 var port = ismain ? 8080 : 8081;
 var url  = 'http://localhost:' + port + '/';
@@ -18,6 +19,7 @@ console.log("Main service: " + ismain);
 server.listen(port);
 console.log(url);
 
+// Date and time to string generator
 function getDateTime() {
     var date = new Date();
 
@@ -43,59 +45,53 @@ function getDateTime() {
 
 app.use(bodyParser.urlencoded({extend: false}));
 
+// Append to file wrapper
 function fileWriter(fileName, text) {
-	/*var log = logFiles[fileName];
-	if (log == undefined) {
-		log = fs.createWriteStream(fileName, {'flags': 'a'});
-		logFiles[fileName] = log;
-	}
-	log.once('drain', text);
-	*/
 	fs.appendFileSync(fileName, text);
 }
 
+// Logger of action vs. submission
 app.post('/data', function(req, res) {
 	var user = req.body.user;
 	var logF = req.body.log;
 	var filePath = "triplets/triplets_page_" + logF + ".log";
 	
-	//console.log("======================");
 	var isSubmit = req.body.isSubmit;
 	if (isSubmit == "true") {		
 		var comment = req.body.comm;
 		fileWriter(filePath, "Submitted by " + user + ":\t" + comment + "\n*******************************\n\n");
-		//console.log(filePath + ":\n\tSubmitted:\t" + comment + "\n");
 	} else {
 		var mark = req.body.mark;
 		var src = req.body.src;
 		var msg = getDateTime() + "\tImage by " + user + ":\t" + src + "\t" + mark;
 		fileWriter(filePath, msg + "\n");
-		//console.log(filePath + ":\n\t" + msg + "\n");
 	}
 	res.end();
 });
 
+// New use gets new stack of images and data
 app.get('/newUser', function(req, res) {
     user = req.query.user;
 	var time = getDateTime();
 	var countData = info.countSources();
 	
-	//info.resetAll();
 	response = user + "_" + time;
 	res.send({user: response, srcs: countData.srcs, grps: countData.grps});
 });
 
+// Main url - just show index.html
 app.get('/', function (req, res) {
-    //console.log(__dirname);
 	info.resetAll();
     res.sendFile(__dirname + path.normalize('/index.html'));
 });
 
+// GET of new images
 app.get('/newImage', function (req, res) {
     randImages = info.getRandImages(req.query.num, req.query.page);
     res.send(randImages);
 });
 
+// Misc gallery
 app.get('/gallery', function (req, res) {
 	res.writeHead(302, {
 	  'Location': '/PhotoFloat/web/index.html'
@@ -103,6 +99,7 @@ app.get('/gallery', function (req, res) {
 	res.end();
 });
 
+// Resets all data (in case groups change)
 app.get('/reset', function(req, res){
 	info.resetAll();
 	
@@ -112,8 +109,8 @@ app.get('/reset', function(req, res){
 	res.end();
 });
 
+// Any other case - just try accessing that path
 app.get('/*', function (req, res) {
-    //console.log(info.getPath(req));
     res.sendFile(__dirname + path.normalize(info.getPath(req)));
 });
 

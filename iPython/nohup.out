@@ -287,3 +287,4 @@ Total nSV = 10
 [W 19:26:34.890 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
 [I 19:28:15.205 NotebookApp] Saving file at /SegmentsToJpg-Deterministic.ipynb
 [W 19:28:15.208 NotebookApp] Saving untrusted notebook SegmentsToJpg-Deterministic.ipynb
+[W 20:27:45.037 NotebookApp] WebSocket ping timeout after 119863 ms.

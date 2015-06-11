@@ -79,7 +79,7 @@
 			}
 			
 			<!-- Clean cookies when version changes -->
-			var version = "v10.5";
+			var version = "v10.6";
 			var siteVer = getCookie("siteVersion");
 			if (siteVer == "") {
 				setCookie("siteVersion", version, 100);
@@ -454,7 +454,7 @@
 			}
 		}
 		
-		<!-- Wrapper for tillLoad to know when all photos were sucesfully loaded.  -->
+		<!-- Wrapper for tillLoad to know when all photos were successfully loaded.  -->
 		function changeSrc(div, src, col, lbl) {
 			$(div).unbind("load");
 			if (lbl == -1) {
@@ -465,6 +465,16 @@
 					addCircle(src, col, lbl, false)
 				});
 			}
+		}
+		
+		<!-- A page skipper.  -->
+		function skipper() {
+			$("#comment").attr('value', "<skipped>");
+			$('#previewer').hide();
+			prevCheck = $("#transit").attr('checked');
+			$("#transit").attr('checked', false);
+			logToNextPage();
+			$("#transit").attr('checked', prevCheck);
 		}
 </script>
 </head>
@@ -507,7 +517,8 @@
 			<br/><br/>
 			<img id="myPreview" src="" style="height: 600px; border:15px solid #A65200; opacity: 1; border-radius: 20px; z-index: 100"/>
 			<br/>
-			<img src="images/continue.png" id="buttDone" style="cursor: pointer" onClick="javascript: $('#previewer').hide()"/>
+			<img src="images/continue.png" id="buttDone" style="cursor: pointer" onClick="javascript: $('#previewer').hide()">
+			<img src="images/skip.png" id="buttSkip" style="cursor: pointer" onClick="skipper()"/>
 			</section>
 		</div>
 		<div id="backgroundPopup" style="position: fixed; opacity: 0.9; display: block; z-index: 2; height: 113%; width: 100%">

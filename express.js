@@ -10,7 +10,7 @@ var server = http.createServer(app);
 
 // Main folder gets port 8080, otherwise gets 8081
 var ismain = __dirname.indexOf("-MAIN") > -1;
-var port = ismain ? 8080 : 8081;
+var port = ismain ? 8080 : 8083;
 var url  = 'http://localhost:' + port + '/';
 var randImages = [];
 var logFiles = {};

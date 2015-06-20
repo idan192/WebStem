@@ -3,25 +3,25 @@ var fs = fs || require('fs');
 var path = require('path');
 var currDir, files;
 var allDirs;
-resetAll();
+
 
 // Resets a session. 
-function resetAll() {
+function resetAll(dir, suffix) {
 	console.log("* NodeJS resets *");
 	currDir = "";
 	files = [];
 	dirI = 0;
-	allDirs = getDirs("./photos/");
+	allDirs = getDirs(dir, suffix);
 }
 
 // Lists all groups in photos folder
-function getDirs(rootDir) {
+function getDirs(rootDir, suffix) {
     var allFiles = fs.readdirSync(rootDir);
     var dirs = [];
 		
     for (var i = 0; i < allFiles.length; ++i) {
 		var file = allFiles[i];
-        if (file.substring(0, 6) == "group_") {
+        if (file.substring(0, 6) == suffix) {
             var filePath = rootDir + file;
             var stat = fs.statSync(filePath);
 		
@@ -45,12 +45,12 @@ function shuffleArray(array, from, len) {
 }
 
 // Get next group
-function getNextList(skip, len, dirI) {
+function getNextList(dir, skip, len, dirI) {
 	if (dirI >= allDirs.length || dirI < 0) {
 		return;
 	}
 	currDir = allDirs[dirI];
-	files = fs.readdirSync("./photos/" + currDir);
+	files = fs.readdirSync(dir + currDir);
 	shuffleArray(files, skip, len);
 }
 
@@ -60,8 +60,8 @@ function getRandomInt(min, max) {
 }
 
 // Count image  sources (correlates to number of sections)
-function countSources() {
-	var allFiles = fs.readdirSync("./photos/");
+function countSources(dir, suffix) {
+	var allFiles = fs.readdirSync(dir);
     var allSrcs = {};
 	var cntGroups = 0;
 		
@@ -71,7 +71,7 @@ function countSources() {
         if (name == "src_") {
 			idx = file.split("_")[1];
             allSrcs[idx] = file;
-		} else if (name == "grou") {
+		} else if (name == suffix.substring(0, 4)) {
 			++cntGroups;
 		}
 	}
@@ -79,14 +79,14 @@ function countSources() {
 }
 
 // Get N number of random images from a page (next group)
-function getRandImages(len, page) {
+function getRandImages(dir, len, page) {
 	page = page - 1;
 	len = parseInt(len);
-	getNextList(7, len, page);
+	getNextList(dir, 7, len, page);
 	var toRemove = [];
 	var res = [];
 	res.length = len + 7;
-	res[0] = './photos/' + currDir + '/';
+	res[0] = dir + currDir + '/';
 	res[1] = files[4];
 	res[2] = files[5];
 	res[3] = files[2];

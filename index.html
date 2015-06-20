@@ -60,6 +60,7 @@
 		var mainImage2 = "";
 		var redForRed = "";
 		var waitCntr = 0;
+		var totalSrcs = 0;
 		
 		<!-- A way to distinguish between images we want to allow logging and not allow that -->
 		var selected = {"#img1":false, "#img2":false, "#img3":false, "#img4":false, "#img5":false, "#img6":false, 
@@ -114,13 +115,13 @@
 					
 					setCookie("fileName", realData.user, 100);
 					$('#page').text("[Page " + pageNum + " of " + cntGroups + "]");
-					
-					var totalFull = Object.keys(allSrcs).max;
+				
 					$('#waiter').show();
 					for (var k in allSrcs) {
 						var div = '<img id="org_' + k + '"/>';
 						$(div).appendTo('body').css('display','none');
 						changeSrc("#org_" + k, "/photos/" + allSrcs[k], "", -1);
+						totalSrcs++;
 					}
 				}	
 			});
@@ -443,7 +444,7 @@
 		function tillLoad() {
 			++waitCntr;
 			//console.log(waitCntr);
-			if ((!loadedOnce && waitCntr >= 28) || (loadedOnce && waitCntr >= (totalImages  + 4))) {
+			if ((!loadedOnce && waitCntr >= totalSrcs) || (loadedOnce && waitCntr >= (totalImages  + 4))) {
 				waitCntr = 0;
 				if (!loadedOnce) {
 					loadedOnce = true;
@@ -503,7 +504,7 @@
 			<br/>
 			<canvas id="myCanvas2" width="750px" style="border:15px solid darkblue; opacity: 1; border-radius: 20px; z-index: 100"> Your browser does not support the HTML5 canvas tag.</canvas>
 			<br/>
-			<img src="images/continue.png" id="buttDone" style="cursor: pointer" onClick="loadNextStack()"/>
+			<img src="images/Correct.png" id="buttDone" style="cursor: pointer" onClick="loadNextStack()"/>
 			</section>
 		</div>
 		<div id="backgroundPopup" style="position: fixed; opacity: 0.9; display: block; z-index: 2; height: 113%; width: 100%">
@@ -517,8 +518,8 @@
 			<br/><br/>
 			<img id="myPreview" src="" style="height: 600px; border:15px solid #A65200; opacity: 1; border-radius: 20px; z-index: 100"/>
 			<br/>
-			<img src="images/continue.png" id="buttDone" style="cursor: pointer" onClick="javascript: $('#previewer').hide()">
-			<img src="images/skip.png" id="buttSkip" style="cursor: pointer" onClick="skipper()"/>
+			<img src="images/Incorrect.png" id="buttDone" style="cursor: pointer" onClick="javascript: $('#previewer').hide()">
+			<img src="images/Correct.png" id="buttSkip" style="cursor: pointer" onClick="skipper()"/>
 			</section>
 		</div>
 		<div id="backgroundPopup" style="position: fixed; opacity: 0.9; display: block; z-index: 2; height: 113%; width: 100%">
@@ -645,7 +646,7 @@
 			Idan Izhaki &emsp; &emsp; <a href="mailto:iizhaki@ucsd.edu">iizhaki@ucsd.edu</a>
 		</div>
 		</br>
-		<img src="images/continue.png" style="cursor: pointer" onclick="hideGuide()"/>
+		<img src="images/Continue.png" style="cursor: pointer" onclick="hideGuide()"/>
 		</div>
 	</div>
 </body>
